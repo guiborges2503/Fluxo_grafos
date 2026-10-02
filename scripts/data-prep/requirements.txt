@@ -1,0 +1,4 @@
+# Núcleo (Ford-Fulkerson): nenhuma dependência externa.
+osmnx>=2.0        # apenas download/cache do OpenStreetMap
+networkx>=3.0     # apenas formato do grafo do OSMnx e validação cruzada nos testes
+pytest>=8.0       # testes

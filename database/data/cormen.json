@@ -1,0 +1,73 @@
+{
+ "name": "cormen",
+ "description": "Cormen et al., fluxo máximo 23",
+ "source": "s",
+ "sink": "t",
+ "vertices": [
+  {
+   "id": "s"
+  },
+  {
+   "id": "v1"
+  },
+  {
+   "id": "v2"
+  },
+  {
+   "id": "v3"
+  },
+  {
+   "id": "v4"
+  },
+  {
+   "id": "t"
+  }
+ ],
+ "edges": [
+  {
+   "from": "s",
+   "to": "v1",
+   "capacity": 16.0
+  },
+  {
+   "from": "s",
+   "to": "v2",
+   "capacity": 13.0
+  },
+  {
+   "from": "v2",
+   "to": "v1",
+   "capacity": 4.0
+  },
+  {
+   "from": "v1",
+   "to": "v3",
+   "capacity": 12.0
+  },
+  {
+   "from": "v3",
+   "to": "v2",
+   "capacity": 9.0
+  },
+  {
+   "from": "v2",
+   "to": "v4",
+   "capacity": 14.0
+  },
+  {
+   "from": "v4",
+   "to": "v3",
+   "capacity": 7.0
+  },
+  {
+   "from": "v3",
+   "to": "t",
+   "capacity": 20.0
+  },
+  {
+   "from": "v4",
+   "to": "t",
+   "capacity": 4.0
+  }
+ ]
+}

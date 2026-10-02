@@ -1,0 +1,32 @@
+{
+ "name": "sem_caminho",
+ "description": "Origem e destino desconectados",
+ "source": "s",
+ "sink": "t",
+ "vertices": [
+  {
+   "id": "s"
+  },
+  {
+   "id": "a"
+  },
+  {
+   "id": "b"
+  },
+  {
+   "id": "t"
+  }
+ ],
+ "edges": [
+  {
+   "from": "s",
+   "to": "a",
+   "capacity": 5.0
+  },
+  {
+   "from": "b",
+   "to": "t",
+   "capacity": 5.0
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+{
+ "name": "patologico_M1000",
+ "description": "Pior caso do Ford-Fulkerson, M=1000",
+ "source": "s",
+ "sink": "t",
+ "vertices": [
+  {
+   "id": "s"
+  },
+  {
+   "id": "a"
+  },
+  {
+   "id": "b"
+  },
+  {
+   "id": "t"
+  }
+ ],
+ "edges": [
+  {
+   "from": "s",
+   "to": "a",
+   "capacity": 1000.0
+  },
+  {
+   "from": "s",
+   "to": "b",
+   "capacity": 1000.0
+  },
+  {
+   "from": "a",
+   "to": "b",
+   "capacity": 1.0
+  },
+  {
+   "from": "a",
+   "to": "t",
+   "capacity": 1000.0
+  },
+  {
+   "from": "b",
+   "to": "t",
+   "capacity": 1000.0
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Deixa o Apache servir /api/*.php diretamente (não redireciona para o React)
+  RewriteRule ^api/ - [L]
+
+  # Arquivos e pastas reais (assets, favicon, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # SPA React — demais rotas vão para index.html
+  RewriteRule ^ index.html [L]
+</IfModule>

@@ -1,0 +1,1154 @@
+{
+    "name": "malha_bairro_pequeno",
+    "description": "Malha sintética 6×8, avenidas a cada 3 linhas, semente 3",
+    "source": "S*",
+    "sink": "T*",
+    "vertices": [
+        {
+            "id": "r0c0",
+            "x": 0,
+            "y": 0
+        },
+        {
+            "id": "r0c1",
+            "x": 1,
+            "y": 0
+        },
+        {
+            "id": "r0c2",
+            "x": 2,
+            "y": 0
+        },
+        {
+            "id": "r0c3",
+            "x": 3,
+            "y": 0
+        },
+        {
+            "id": "r0c4",
+            "x": 4,
+            "y": 0
+        },
+        {
+            "id": "r0c5",
+            "x": 5,
+            "y": 0
+        },
+        {
+            "id": "r0c6",
+            "x": 6,
+            "y": 0
+        },
+        {
+            "id": "r0c7",
+            "x": 7,
+            "y": 0
+        },
+        {
+            "id": "r1c0",
+            "x": 0,
+            "y": 1
+        },
+        {
+            "id": "r1c1",
+            "x": 1,
+            "y": 1
+        },
+        {
+            "id": "r1c2",
+            "x": 2,
+            "y": 1
+        },
+        {
+            "id": "r1c3",
+            "x": 3,
+            "y": 1
+        },
+        {
+            "id": "r1c4",
+            "x": 4,
+            "y": 1
+        },
+        {
+            "id": "r1c5",
+            "x": 5,
+            "y": 1
+        },
+        {
+            "id": "r1c6",
+            "x": 6,
+            "y": 1
+        },
+        {
+            "id": "r1c7",
+            "x": 7,
+            "y": 1
+        },
+        {
+            "id": "r2c0",
+            "x": 0,
+            "y": 2
+        },
+        {
+            "id": "r2c1",
+            "x": 1,
+            "y": 2
+        },
+        {
+            "id": "r2c2",
+            "x": 2,
+            "y": 2
+        },
+        {
+            "id": "r2c3",
+            "x": 3,
+            "y": 2
+        },
+        {
+            "id": "r2c4",
+            "x": 4,
+            "y": 2
+        },
+        {
+            "id": "r2c5",
+            "x": 5,
+            "y": 2
+        },
+        {
+            "id": "r2c6",
+            "x": 6,
+            "y": 2
+        },
+        {
+            "id": "r2c7",
+            "x": 7,
+            "y": 2
+        },
+        {
+            "id": "r3c0",
+            "x": 0,
+            "y": 3
+        },
+        {
+            "id": "r3c1",
+            "x": 1,
+            "y": 3
+        },
+        {
+            "id": "r3c2",
+            "x": 2,
+            "y": 3
+        },
+        {
+            "id": "r3c3",
+            "x": 3,
+            "y": 3
+        },
+        {
+            "id": "r3c4",
+            "x": 4,
+            "y": 3
+        },
+        {
+            "id": "r3c5",
+            "x": 5,
+            "y": 3
+        },
+        {
+            "id": "r3c6",
+            "x": 6,
+            "y": 3
+        },
+        {
+            "id": "r3c7",
+            "x": 7,
+            "y": 3
+        },
+        {
+            "id": "r4c0",
+            "x": 0,
+            "y": 4
+        },
+        {
+            "id": "r4c1",
+            "x": 1,
+            "y": 4
+        },
+        {
+            "id": "r4c2",
+            "x": 2,
+            "y": 4
+        },
+        {
+            "id": "r4c3",
+            "x": 3,
+            "y": 4
+        },
+        {
+            "id": "r4c4",
+            "x": 4,
+            "y": 4
+        },
+        {
+            "id": "r4c5",
+            "x": 5,
+            "y": 4
+        },
+        {
+            "id": "r4c6",
+            "x": 6,
+            "y": 4
+        },
+        {
+            "id": "r4c7",
+            "x": 7,
+            "y": 4
+        },
+        {
+            "id": "r5c0",
+            "x": 0,
+            "y": 5
+        },
+        {
+            "id": "r5c1",
+            "x": 1,
+            "y": 5
+        },
+        {
+            "id": "r5c2",
+            "x": 2,
+            "y": 5
+        },
+        {
+            "id": "r5c3",
+            "x": 3,
+            "y": 5
+        },
+        {
+            "id": "r5c4",
+            "x": 4,
+            "y": 5
+        },
+        {
+            "id": "r5c5",
+            "x": 5,
+            "y": 5
+        },
+        {
+            "id": "r5c6",
+            "x": 6,
+            "y": 5
+        },
+        {
+            "id": "r5c7",
+            "x": 7,
+            "y": 5
+        },
+        {
+            "id": "S*",
+            "role": "super_source",
+            "x": -1,
+            "y": 2.5
+        },
+        {
+            "id": "T*",
+            "role": "super_sink",
+            "x": 8,
+            "y": 2.5
+        }
+    ],
+    "edges": [
+        {
+            "from": "r0c0",
+            "to": "r0c1",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c1",
+            "to": "r0c0",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c0",
+            "to": "r1c0",
+            "capacity": 600
+        },
+        {
+            "from": "r1c0",
+            "to": "r0c0",
+            "capacity": 600
+        },
+        {
+            "from": "r0c1",
+            "to": "r0c2",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c2",
+            "to": "r0c1",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c1",
+            "to": "r1c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c1",
+            "to": "r0c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r0c2",
+            "to": "r0c3",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c3",
+            "to": "r0c2",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c2",
+            "to": "r1c2",
+            "capacity": 600
+        },
+        {
+            "from": "r1c2",
+            "to": "r0c2",
+            "capacity": 600
+        },
+        {
+            "from": "r0c3",
+            "to": "r0c4",
+            "capacity": 1500
+        },
+        {
+            "from": "r0c4",
+            "to": "r0c3",
+            "capacity": 1500
+        },
+        {
+            "from": "r0c3",
+            "to": "r1c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c3",
+            "to": "r0c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r0c4",
+            "to": "r0c5",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c5",
+            "to": "r0c4",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c4",
+            "to": "r1c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c4",
+            "to": "r0c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r0c5",
+            "to": "r0c6",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c6",
+            "to": "r0c5",
+            "capacity": 3000
+        },
+        {
+            "from": "r0c5",
+            "to": "r1c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c5",
+            "to": "r0c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r0c6",
+            "to": "r0c7",
+            "capacity": 4500
+        },
+        {
+            "from": "r0c7",
+            "to": "r0c6",
+            "capacity": 4500
+        },
+        {
+            "from": "r0c6",
+            "to": "r1c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c6",
+            "to": "r0c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r0c7",
+            "to": "r1c7",
+            "capacity": 600
+        },
+        {
+            "from": "r1c7",
+            "to": "r0c7",
+            "capacity": 600
+        },
+        {
+            "from": "r1c0",
+            "to": "r1c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c1",
+            "to": "r1c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c0",
+            "to": "r2c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c0",
+            "to": "r1c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c1",
+            "to": "r1c2",
+            "capacity": 600
+        },
+        {
+            "from": "r1c2",
+            "to": "r1c1",
+            "capacity": 600
+        },
+        {
+            "from": "r1c1",
+            "to": "r2c1",
+            "capacity": 600
+        },
+        {
+            "from": "r2c1",
+            "to": "r1c1",
+            "capacity": 600
+        },
+        {
+            "from": "r1c2",
+            "to": "r1c3",
+            "capacity": 600
+        },
+        {
+            "from": "r1c3",
+            "to": "r1c2",
+            "capacity": 600
+        },
+        {
+            "from": "r1c2",
+            "to": "r2c2",
+            "capacity": 600
+        },
+        {
+            "from": "r2c2",
+            "to": "r1c2",
+            "capacity": 600
+        },
+        {
+            "from": "r1c3",
+            "to": "r1c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c4",
+            "to": "r1c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c3",
+            "to": "r2c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c3",
+            "to": "r1c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c4",
+            "to": "r1c5",
+            "capacity": 600
+        },
+        {
+            "from": "r1c5",
+            "to": "r1c4",
+            "capacity": 600
+        },
+        {
+            "from": "r1c4",
+            "to": "r2c4",
+            "capacity": 600
+        },
+        {
+            "from": "r2c4",
+            "to": "r1c4",
+            "capacity": 600
+        },
+        {
+            "from": "r1c5",
+            "to": "r1c6",
+            "capacity": 600
+        },
+        {
+            "from": "r1c6",
+            "to": "r1c5",
+            "capacity": 600
+        },
+        {
+            "from": "r1c5",
+            "to": "r2c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c5",
+            "to": "r1c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r1c6",
+            "to": "r1c7",
+            "capacity": 600
+        },
+        {
+            "from": "r1c7",
+            "to": "r1c6",
+            "capacity": 600
+        },
+        {
+            "from": "r1c6",
+            "to": "r2c6",
+            "capacity": 600
+        },
+        {
+            "from": "r2c6",
+            "to": "r1c6",
+            "capacity": 600
+        },
+        {
+            "from": "r1c7",
+            "to": "r2c7",
+            "capacity": 600
+        },
+        {
+            "from": "r2c7",
+            "to": "r1c7",
+            "capacity": 600
+        },
+        {
+            "from": "r2c0",
+            "to": "r2c1",
+            "capacity": 600
+        },
+        {
+            "from": "r2c1",
+            "to": "r2c0",
+            "capacity": 600
+        },
+        {
+            "from": "r2c0",
+            "to": "r3c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c0",
+            "to": "r2c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c1",
+            "to": "r2c2",
+            "capacity": 600
+        },
+        {
+            "from": "r2c2",
+            "to": "r2c1",
+            "capacity": 600
+        },
+        {
+            "from": "r2c1",
+            "to": "r3c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c1",
+            "to": "r2c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c2",
+            "to": "r2c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c3",
+            "to": "r2c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c2",
+            "to": "r3c2",
+            "capacity": 600
+        },
+        {
+            "from": "r3c2",
+            "to": "r2c2",
+            "capacity": 600
+        },
+        {
+            "from": "r2c3",
+            "to": "r2c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c4",
+            "to": "r2c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c3",
+            "to": "r3c3",
+            "capacity": 600
+        },
+        {
+            "from": "r3c3",
+            "to": "r2c3",
+            "capacity": 600
+        },
+        {
+            "from": "r2c4",
+            "to": "r2c5",
+            "capacity": 600
+        },
+        {
+            "from": "r2c5",
+            "to": "r2c4",
+            "capacity": 600
+        },
+        {
+            "from": "r2c4",
+            "to": "r3c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c4",
+            "to": "r2c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c5",
+            "to": "r2c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c6",
+            "to": "r2c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c5",
+            "to": "r3c5",
+            "capacity": 600
+        },
+        {
+            "from": "r3c5",
+            "to": "r2c5",
+            "capacity": 600
+        },
+        {
+            "from": "r2c6",
+            "to": "r2c7",
+            "capacity": 600
+        },
+        {
+            "from": "r2c7",
+            "to": "r2c6",
+            "capacity": 600
+        },
+        {
+            "from": "r2c6",
+            "to": "r3c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c6",
+            "to": "r2c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r2c7",
+            "to": "r3c7",
+            "capacity": 600
+        },
+        {
+            "from": "r3c7",
+            "to": "r2c7",
+            "capacity": 600
+        },
+        {
+            "from": "r3c0",
+            "to": "r3c1",
+            "capacity": 1500
+        },
+        {
+            "from": "r3c1",
+            "to": "r3c0",
+            "capacity": 1500
+        },
+        {
+            "from": "r3c0",
+            "to": "r4c0",
+            "capacity": 600
+        },
+        {
+            "from": "r4c0",
+            "to": "r3c0",
+            "capacity": 600
+        },
+        {
+            "from": "r3c1",
+            "to": "r3c2",
+            "capacity": 4500
+        },
+        {
+            "from": "r3c2",
+            "to": "r3c1",
+            "capacity": 4500
+        },
+        {
+            "from": "r3c1",
+            "to": "r4c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c1",
+            "to": "r3c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c2",
+            "to": "r3c3",
+            "capacity": 1500
+        },
+        {
+            "from": "r3c3",
+            "to": "r3c2",
+            "capacity": 1500
+        },
+        {
+            "from": "r3c2",
+            "to": "r4c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c2",
+            "to": "r3c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c3",
+            "to": "r3c4",
+            "capacity": 3000
+        },
+        {
+            "from": "r3c4",
+            "to": "r3c3",
+            "capacity": 3000
+        },
+        {
+            "from": "r3c3",
+            "to": "r4c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c3",
+            "to": "r3c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c4",
+            "to": "r3c5",
+            "capacity": 1500
+        },
+        {
+            "from": "r3c5",
+            "to": "r3c4",
+            "capacity": 1500
+        },
+        {
+            "from": "r3c4",
+            "to": "r4c4",
+            "capacity": 600
+        },
+        {
+            "from": "r4c4",
+            "to": "r3c4",
+            "capacity": 600
+        },
+        {
+            "from": "r3c5",
+            "to": "r3c6",
+            "capacity": 3000
+        },
+        {
+            "from": "r3c6",
+            "to": "r3c5",
+            "capacity": 3000
+        },
+        {
+            "from": "r3c5",
+            "to": "r4c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c5",
+            "to": "r3c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r3c6",
+            "to": "r3c7",
+            "capacity": 3000
+        },
+        {
+            "from": "r3c7",
+            "to": "r3c6",
+            "capacity": 3000
+        },
+        {
+            "from": "r3c6",
+            "to": "r4c6",
+            "capacity": 600
+        },
+        {
+            "from": "r4c6",
+            "to": "r3c6",
+            "capacity": 600
+        },
+        {
+            "from": "r3c7",
+            "to": "r4c7",
+            "capacity": 600
+        },
+        {
+            "from": "r4c7",
+            "to": "r3c7",
+            "capacity": 600
+        },
+        {
+            "from": "r4c0",
+            "to": "r4c1",
+            "capacity": 600
+        },
+        {
+            "from": "r4c1",
+            "to": "r4c0",
+            "capacity": 600
+        },
+        {
+            "from": "r4c0",
+            "to": "r5c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c0",
+            "to": "r4c0",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c1",
+            "to": "r4c2",
+            "capacity": 600
+        },
+        {
+            "from": "r4c2",
+            "to": "r4c1",
+            "capacity": 600
+        },
+        {
+            "from": "r4c1",
+            "to": "r5c1",
+            "capacity": 600
+        },
+        {
+            "from": "r5c1",
+            "to": "r4c1",
+            "capacity": 600
+        },
+        {
+            "from": "r4c2",
+            "to": "r4c3",
+            "capacity": 600
+        },
+        {
+            "from": "r4c3",
+            "to": "r4c2",
+            "capacity": 600
+        },
+        {
+            "from": "r4c2",
+            "to": "r5c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c2",
+            "to": "r4c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c3",
+            "to": "r4c4",
+            "capacity": 600
+        },
+        {
+            "from": "r4c4",
+            "to": "r4c3",
+            "capacity": 600
+        },
+        {
+            "from": "r4c3",
+            "to": "r5c3",
+            "capacity": 600
+        },
+        {
+            "from": "r5c3",
+            "to": "r4c3",
+            "capacity": 600
+        },
+        {
+            "from": "r4c4",
+            "to": "r4c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c5",
+            "to": "r4c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c4",
+            "to": "r5c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c4",
+            "to": "r4c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c5",
+            "to": "r4c6",
+            "capacity": 600
+        },
+        {
+            "from": "r4c6",
+            "to": "r4c5",
+            "capacity": 600
+        },
+        {
+            "from": "r4c5",
+            "to": "r5c5",
+            "capacity": 600
+        },
+        {
+            "from": "r5c5",
+            "to": "r4c5",
+            "capacity": 600
+        },
+        {
+            "from": "r4c6",
+            "to": "r4c7",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c7",
+            "to": "r4c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c6",
+            "to": "r5c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c6",
+            "to": "r4c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r4c7",
+            "to": "r5c7",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c7",
+            "to": "r4c7",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c0",
+            "to": "r5c1",
+            "capacity": 600
+        },
+        {
+            "from": "r5c1",
+            "to": "r5c0",
+            "capacity": 600
+        },
+        {
+            "from": "r5c1",
+            "to": "r5c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c2",
+            "to": "r5c1",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c2",
+            "to": "r5c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c3",
+            "to": "r5c2",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c3",
+            "to": "r5c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c4",
+            "to": "r5c3",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c4",
+            "to": "r5c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c5",
+            "to": "r5c4",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c5",
+            "to": "r5c6",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c6",
+            "to": "r5c5",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c6",
+            "to": "r5c7",
+            "capacity": 1200
+        },
+        {
+            "from": "r5c7",
+            "to": "r5c6",
+            "capacity": 1200
+        },
+        {
+            "from": "S*",
+            "to": "r0c0",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "r0c7",
+            "to": "T*",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "r1c0",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "r1c7",
+            "to": "T*",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "r2c0",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "r2c7",
+            "to": "T*",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "r3c0",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "r3c7",
+            "to": "T*",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "r4c0",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "r4c7",
+            "to": "T*",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "r5c0",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "r5c7",
+            "to": "T*",
+            "capacity": "inf",
+            "artificial": true
+        }
+    ]
+}

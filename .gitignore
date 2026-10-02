@@ -1,0 +1,10 @@
+node_modules/
+NeXora/
+dist/
+__pycache__/
+.pytest_cache/
+*.tsbuildinfo
+database/data/osm_cache/
+.env
+api/.env
+api/logs/*.log
