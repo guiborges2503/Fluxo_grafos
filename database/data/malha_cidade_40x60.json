@@ -1,6 +1,7 @@
 {
     "name": "malha_cidade_40x60",
     "description": "Malha sintética 40×60, avenidas a cada 4 linhas, semente 11",
+    "unit": "veículos/hora",
     "source": "S*",
     "sink": "T*",
     "vertices": [

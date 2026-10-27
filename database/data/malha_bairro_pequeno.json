@@ -1,6 +1,7 @@
 {
     "name": "malha_bairro_pequeno",
     "description": "Malha sintética 6×8, avenidas a cada 3 linhas, semente 3",
+    "unit": "veículos/hora",
     "source": "S*",
     "sink": "T*",
     "vertices": [

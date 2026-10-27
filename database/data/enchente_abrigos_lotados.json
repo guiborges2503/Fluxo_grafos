@@ -1,0 +1,165 @@
+{
+ "name": "Abrigos lotados",
+ "description": "Os abrigos só conseguem descarregar uma quantidade limitada por dia: Porto Alegre 8, São Leopoldo 5 e Canoas 7 caminhões. Agora o gargalo está nas estradas ou nos próprios abrigos?",
+ "unit": "caminhões/dia",
+ "source": "S*",
+ "sink": "T*",
+ "vertices": [
+  {
+   "id": "S*",
+   "role": "super_source",
+   "x": -2.2,
+   "y": 2.2
+  },
+  {
+   "id": "Santa Maria",
+   "role": "doacao",
+   "x": 0,
+   "y": 0
+  },
+  {
+   "id": "Passo Fundo",
+   "role": "doacao",
+   "x": 0,
+   "y": 2.2
+  },
+  {
+   "id": "Caxias do Sul",
+   "role": "doacao",
+   "x": 0,
+   "y": 4.4
+  },
+  {
+   "id": "Santa Cruz do Sul",
+   "role": "passagem",
+   "x": 2.8,
+   "y": 0
+  },
+  {
+   "id": "Novo Hamburgo",
+   "role": "passagem",
+   "x": 2.8,
+   "y": 2.6
+  },
+  {
+   "id": "Gravataí",
+   "role": "passagem",
+   "x": 2.8,
+   "y": 4.8
+  },
+  {
+   "id": "Porto Alegre",
+   "role": "abrigo",
+   "x": 5.6,
+   "y": 0.6
+  },
+  {
+   "id": "São Leopoldo",
+   "role": "abrigo",
+   "x": 5.6,
+   "y": 2.4
+  },
+  {
+   "id": "Canoas",
+   "role": "abrigo",
+   "x": 5.6,
+   "y": 4.4
+  },
+  {
+   "id": "T*",
+   "role": "super_sink",
+   "x": 7.8,
+   "y": 2.4
+  }
+ ],
+ "edges": [
+  {
+   "from": "S*",
+   "to": "Santa Maria",
+   "capacity": "inf",
+   "artificial": true
+  },
+  {
+   "from": "S*",
+   "to": "Passo Fundo",
+   "capacity": "inf",
+   "artificial": true
+  },
+  {
+   "from": "S*",
+   "to": "Caxias do Sul",
+   "capacity": "inf",
+   "artificial": true
+  },
+  {
+   "from": "Santa Maria",
+   "to": "Santa Cruz do Sul",
+   "capacity": 10
+  },
+  {
+   "from": "Passo Fundo",
+   "to": "Santa Cruz do Sul",
+   "capacity": 7
+  },
+  {
+   "from": "Passo Fundo",
+   "to": "Caxias do Sul",
+   "capacity": 8
+  },
+  {
+   "from": "Caxias do Sul",
+   "to": "Novo Hamburgo",
+   "capacity": 12
+  },
+  {
+   "from": "Caxias do Sul",
+   "to": "Gravataí",
+   "capacity": 6
+  },
+  {
+   "from": "Santa Cruz do Sul",
+   "to": "Novo Hamburgo",
+   "capacity": 4
+  },
+  {
+   "from": "Santa Cruz do Sul",
+   "to": "Porto Alegre",
+   "capacity": 5
+  },
+  {
+   "from": "Novo Hamburgo",
+   "to": "Porto Alegre",
+   "capacity": 6
+  },
+  {
+   "from": "Novo Hamburgo",
+   "to": "São Leopoldo",
+   "capacity": 4
+  },
+  {
+   "from": "Novo Hamburgo",
+   "to": "Gravataí",
+   "capacity": 3
+  },
+  {
+   "from": "Gravataí",
+   "to": "Canoas",
+   "capacity": 10
+  },
+  {
+   "from": "Porto Alegre",
+   "to": "T*",
+   "capacity": 8
+  },
+  {
+   "from": "São Leopoldo",
+   "to": "T*",
+   "capacity": 5
+  },
+  {
+   "from": "Canoas",
+   "to": "T*",
+   "capacity": 7
+  }
+ ]
+}

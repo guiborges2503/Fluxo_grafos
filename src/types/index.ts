@@ -27,6 +27,8 @@ export interface EdgeDef {
 export interface Instance {
   name: string;
   description?: string;
+  /** unidade da capacidade, mostrada junto do fluxo máximo (ex.: "caminhões/dia") */
+  unit?: string;
   source?: Label;
   sink?: Label;
   vertices?: VertexDef[];
@@ -42,8 +44,6 @@ export interface InstanceSummary {
   geo: boolean;
   sizeKb: number;
 }
-
-export type Strategy = "dfs" | "bfs";
 
 /** Uma aresta usada num caminho aumentante: índice da aresta original + se foi percorrida ao contrário. */
 export interface PathEdge {
@@ -71,7 +71,6 @@ export interface EdgeFlow {
 export interface SolveResult {
   source: Label;
   sink: Label;
-  strategy: Strategy;
   value: number;
   numIterations: number;
   elapsedMs: number;
