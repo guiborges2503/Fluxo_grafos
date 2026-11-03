@@ -71,6 +71,8 @@ export interface EdgeFlow {
 export interface SolveResult {
   source: Label;
   sink: Label;
+  /** busca usada no 1º passo (só a API devolve; o navegador usa sempre "dfs") */
+  search?: "dfs" | "bfs";
   value: number;
   numIterations: number;
   elapsedMs: number;

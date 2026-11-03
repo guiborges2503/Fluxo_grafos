@@ -34,9 +34,9 @@ export const api = {
     request<{ deleted: string }>(`/instances.php?file=${encodeURIComponent(file)}`, { method: "DELETE" }),
   generate: (params: Record<string, string | number>) =>
     request<Instance>("/generate.php", { method: "POST", body: JSON.stringify(params) }),
-  solve: (instance: Instance, source: string | number, sink: string | number, record: boolean) =>
+  solve: (instance: Instance, source: string | number, sink: string | number, record: boolean, search: "dfs" | "bfs" = "dfs") =>
     request<SolveResult>("/solve.php", {
       method: "POST",
-      body: JSON.stringify({ instance, source, sink, record }),
+      body: JSON.stringify({ instance, source, sink, record, search }),
     }),
 };

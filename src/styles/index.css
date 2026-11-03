@@ -238,6 +238,17 @@ tr.row-path td { background: #e3e9ef; }
 .usebar span { display: block; height: 100%; background: var(--flow); }
 .cap-input { width: 6.5rem; text-align: right; }
 
+/* ---------------- testes em escala ---------------- */
+.run-stats { margin: 0; text-align: center; }
+.scale { grid-column: 1 / -1; padding: 1rem 1.4rem 2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.scale h2 { font-size: 1.5rem; }
+.scale > p { max-width: 100ch; margin: 0; }
+.scale-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 0.8rem; }
+.scale fieldset { border: 1px solid var(--rule-strong); border-radius: 4px; background: var(--panel); margin: 0; }
+.scale legend { font-family: var(--cond); font-weight: 600; font-size: 1.05rem; padding: 0 0.3rem; }
+.scale .table-tools { margin-bottom: 0; }
+.scale .checks { font-size: 1em; }
+
 /* ---------------- telas menores ---------------- */
 @media (max-width: 1250px) {
   .app, .workspace { grid-template-columns: minmax(0, 1fr); }

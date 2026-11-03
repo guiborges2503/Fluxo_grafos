@@ -7,7 +7,8 @@ import { StepControls } from "@/components/StepControls";
 import { StepPanel } from "@/components/StepPanel";
 import { type Cut, FlowNetwork, antiparallelPairs, compareResults, flowsAfter, fordFulkerson, splitAntiparallel } from "@/utils/fordFulkerson";
 import type { Instance, InstanceSummary, Label, SolveResult } from "@/types";
-import { fmt } from "@/utils/format";
+import { fmt, fmtMs } from "@/utils/format";
+import { ScalePanel } from "@/components/ScalePanel";
 
 /** Cenários da enchente, na ordem em que aparecem na tela. O primeiro abre automaticamente. */
 const SCENARIOS: [file: string, label: string][] = [
@@ -15,10 +16,11 @@ const SCENARIOS: [file: string, label: string][] = [
   ["enchente_ponte_interditada", "Ponte interditada"],
   ["enchente_rota_liberada", "Nova rota liberada"],
   ["enchente_abrigos_lotados", "Abrigos lotados"],
+  ["rs_rodovias", "Malha rodoviária do RS (33 cidades)"],
 ];
 const APPLICATION = SCENARIOS[0][0];
-/** Instâncias usadas só nos testes automáticos: ficam no servidor, mas não aparecem na tela. */
-const HIDDEN = new Set(["cormen", "patologico", "sem_caminho", "aleatorio_300", "malha_bairro_pequeno", "malha_cidade_40x60"]);
+/** Instâncias de teste: não viram botões no topo, mas ficam na tela "Testes em escala". */
+const TEST_ONLY = new Set(["cormen", "patologico", "sem_caminho", "aleatorio_300", "malha_bairro_pequeno", "malha_cidade_40x60"]);
 
 export default function HomePage() {
   const [serverOnline, setServerOnline] = useState(true);
@@ -33,6 +35,7 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const [page, setPage] = useState<"passo" | "escala">("passo");
   const [step, setStep] = useState(0);
   const [tab, setTab] = useState<"cortes" | "editar" | null>(null);
   const [cutPreview, setCutPreview] = useState<Cut | null>(null);
@@ -111,6 +114,7 @@ export default function HomePage() {
 
   /* ---------------- ações ---------------- */
   const pick = async (file: string) => {
+    setPage("passo");
     try {
       applyInstance(await api.getInstance(file), file);
       if (tab === "editar") setTab(null);
@@ -159,7 +163,7 @@ export default function HomePage() {
   const antiparallel = useMemo(() => (instance ? antiparallelPairs(instance) : []), [instance]);
 
   const known = new Set(SCENARIOS.map(([f]) => f));
-  const mine = instances.filter((i) => !known.has(i.file) && !HIDDEN.has(i.file));
+  const mine = instances.filter((i) => !known.has(i.file) && !TEST_ONLY.has(i.file));
   const available = new Set(instances.map((i) => i.file));
   const isMine = currentFile !== null && !known.has(currentFile);
 
@@ -183,13 +187,16 @@ export default function HomePage() {
       <nav className="examples" aria-label="Escolher rede">
         <span className="examples-label">Cenários da enchente:</span>
         {SCENARIOS.filter(([f]) => available.has(f) || !serverOnline).map(([file, label]) => (
-          <button key={file} className={currentFile === file ? "on" : ""} onClick={() => pick(file)} disabled={!serverOnline}>{label}</button>
+          <button key={file} className={page === "passo" && currentFile === file ? "on" : ""} onClick={() => pick(file)} disabled={!serverOnline}>{label}</button>
         ))}
         {mine.map((i) => (
-          <button key={i.file} className={currentFile === i.file ? "on" : ""} onClick={() => pick(i.file)}>{i.name}</button>
+          <button key={i.file} className={page === "passo" && currentFile === i.file ? "on" : ""} onClick={() => pick(i.file)}>{i.name}</button>
         ))}
-        <button className="new" onClick={() => { applyInstance({ name: "minha_rede", vertices: [], edges: [] }, null); setTab("editar"); }}>
+        <button className="new" onClick={() => { setPage("passo"); applyInstance({ name: "minha_rede", vertices: [], edges: [] }, null); setTab("editar"); }}>
           + Criar minha rede
+        </button>
+        <button className={`app-chip${page === "escala" ? " on" : ""}`} onClick={() => setPage("escala")}>
+          Testes em escala (redes grandes)
         </button>
       </nav>
 
@@ -201,7 +208,10 @@ export default function HomePage() {
       )}
       {error && <div className="notice error-banner page-notice" role="alert">{error}</div>}
 
-      {instance ? (
+      {page === "escala" ? (
+        <ScalePanel instances={instances} serverOnline={serverOnline}
+          onOpen={(inst, file) => { setPage("passo"); setTab(null); applyInstance(inst, file); }} />
+      ) : instance ? (
         <>
           <div ref={workspace} className={`workspace${full ? " is-full" : ""}${explain ? "" : " no-panel"}`}>
           <main className="stage">
@@ -260,7 +270,13 @@ export default function HomePage() {
             )}
 
             {local ? (
-              <StepControls total={n} step={step} onStep={(k) => { setStep(k); setCutPreview(null); }} />
+              <>
+                <StepControls total={n} step={step} onStep={(k) => { setStep(k); setCutPreview(null); }} />
+                <p className="muted small run-stats">
+                  {fmt(instance.vertices?.length ?? 0)} vértices e {fmt(m)} arestas · {fmt(n)} {n === 1 ? "iteração" : "iterações"} ·{" "}
+                  {fmt(local.verticesVisited)} vértices visitados nas buscas · calculado no navegador em {fmtMs(local.elapsedMs)}
+                </p>
+              </>
             ) : instance.edges.length > 0 && (
               <div className="controls">
                 <button className="big primary" onClick={() => solve(instance, source, sink)} disabled={source === undefined || sink === undefined}>
