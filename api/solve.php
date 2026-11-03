@@ -22,7 +22,8 @@ fluxo_run(static function (): void {
     if ($source === null || $sink === null) {
         throw new InvalidArgumentException('Informe a origem e o destino.');
     }
-    $result = FordFulkerson::solve($net, $source, $sink, (bool) ($p['record'] ?? true));
+    $search = (string) ($p['search'] ?? 'dfs');
+    $result = FordFulkerson::solve($net, $source, $sink, (bool) ($p['record'] ?? true), null, $search);
     $result['validation'] = Validation::verify($net, $result);
     $result['engine'] = 'php ' . PHP_VERSION;
     respond($result);

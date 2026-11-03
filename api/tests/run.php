@@ -89,6 +89,17 @@ test('patológico chega a 2000', function () {
     $r = FordFulkerson::solve(net([['s','a',1000],['s','b',1000],['a','b',1],['a','t',1000],['b','t',1000]]), 's', 't');
     check($r['value'] == 2000);
 });
+test('busca em largura: mesmo valor, patológico em 2 iterações', function () {
+    $edges = [['s','a',1000],['s','b',1000],['a','b',1],['a','t',1000],['b','t',1000]];
+    $dfs = FordFulkerson::solve(net($edges), 's', 't', false);
+    $n = net($edges);
+    $bfs = FordFulkerson::solve($n, 's', 't', false, null, 'bfs');
+    check($bfs['value'] == 2000 && $bfs['numIterations'] === 2, "bfs {$bfs['numIterations']} iterações");
+    check($dfs['numIterations'] > $bfs['numIterations'], "dfs {$dfs['numIterations']} iterações");
+    check(Validation::verify($n, $bfs) === []);
+});
+test('busca inválida rejeitada', fn() => expectThrows(InvalidArgumentException::class,
+    fn() => FordFulkerson::solve(cormen(), 's', 't', false, null, 'xyz')));
 test('rótulos numéricos (OSM)', function () {
     $r = FordFulkerson::solve(net([[101, 202, 5], [202, 303, 3]]), 101, 303);
     check($r['value'] == 3 && $r['iterations'][0]['vertices'] === [101, 202, 303]);
@@ -115,6 +126,9 @@ for ($seed = 1; $seed <= 30; $seed++) {
         $n = InstanceIO::toNetwork($data);
         $r = FordFulkerson::solve($n, $data['source'], $data['sink'], false);
         check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
+        // a busca em largura tem que chegar ao mesmo valor máximo
+        $b = FordFulkerson::solve($n, $data['source'], $data['sink'], false, null, 'bfs');
+        check(abs($b['value'] - $r['value']) < 1e-6, "bfs {$b['value']} ≠ dfs {$r['value']}");
     });
 }
 
