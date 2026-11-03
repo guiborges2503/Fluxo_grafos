@@ -67,6 +67,7 @@ final class Generator
         }
         return [
             'name' => "malha_{$rows}x{$cols}_s{$seed}",
+            'unit' => 'veículos/hora',
             'description' => "Malha sintética {$rows}×{$cols}, avenidas a cada {$avenueEvery} linhas, semente {$seed}",
             'source' => 'S*',
             'sink' => 'T*',

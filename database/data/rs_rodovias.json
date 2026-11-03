@@ -1,0 +1,717 @@
+{
+    "name": "Malha rodoviária do RS",
+    "description": "Rodovias do RS em maio de 2024: 33 cidades, 44 trechos. Sete pontos de entrada de doações (S*) e seis cidades com abrigos (T*). Capacidade = faixas por sentido × 150 caminhões/dia × estado da via (liberada 1, parcial 0,5, interditada 0). Estados e capacidades são estimativas do grupo; ver scripts/build_rs_rodovias.php.",
+    "unit": "caminhões/dia",
+    "source": "S*",
+    "sink": "T*",
+    "vertices": [
+        {
+            "id": "S*",
+            "role": "super_source",
+            "x": -1.6,
+            "y": 4.5
+        },
+        {
+            "id": "Erechim",
+            "role": "doacao",
+            "lat_real": -27.63,
+            "lon_real": -52.27,
+            "x": 3.81,
+            "y": 0.51
+        },
+        {
+            "id": "Passo Fundo",
+            "role": "doacao",
+            "lat_real": -28.26,
+            "lon_real": -52.41,
+            "x": 3.5,
+            "y": 1.89
+        },
+        {
+            "id": "Santa Maria",
+            "role": "doacao",
+            "lat_real": -29.69,
+            "lon_real": -53.81,
+            "x": 0.42,
+            "y": 5.04
+        },
+        {
+            "id": "Caxias do Sul",
+            "role": "doacao",
+            "lat_real": -29.17,
+            "lon_real": -51.18,
+            "x": 6.2,
+            "y": 3.89
+        },
+        {
+            "id": "Pelotas",
+            "role": "doacao",
+            "lat_real": -31.77,
+            "lon_real": -52.34,
+            "x": 3.65,
+            "y": 9.61
+        },
+        {
+            "id": "Vacaria (divisa SC, BR-116)",
+            "role": "doacao",
+            "lat_real": -28.51,
+            "lon_real": -50.93,
+            "x": 6.75,
+            "y": 2.44
+        },
+        {
+            "id": "Torres (divisa SC, BR-101)",
+            "role": "doacao",
+            "lat_real": -29.34,
+            "lon_real": -49.73,
+            "x": 9.39,
+            "y": 4.27
+        },
+        {
+            "id": "Carazinho",
+            "role": "passagem",
+            "lat_real": -28.28,
+            "lon_real": -52.79,
+            "x": 2.66,
+            "y": 1.94
+        },
+        {
+            "id": "Lagoa Vermelha",
+            "role": "passagem",
+            "lat_real": -28.21,
+            "lon_real": -51.53,
+            "x": 5.43,
+            "y": 1.78
+        },
+        {
+            "id": "Soledade",
+            "role": "passagem",
+            "lat_real": -28.83,
+            "lon_real": -52.51,
+            "x": 3.28,
+            "y": 3.15
+        },
+        {
+            "id": "Bento Gonçalves",
+            "role": "passagem",
+            "lat_real": -29.17,
+            "lon_real": -51.52,
+            "x": 5.46,
+            "y": 3.89
+        },
+        {
+            "id": "Farroupilha",
+            "role": "passagem",
+            "lat_real": -29.22,
+            "lon_real": -51.35,
+            "x": 5.83,
+            "y": 4
+        },
+        {
+            "id": "Nova Petrópolis",
+            "role": "passagem",
+            "lat_real": -29.37,
+            "lon_real": -51.11,
+            "x": 6.36,
+            "y": 4.33
+        },
+        {
+            "id": "São Sebastião do Caí",
+            "role": "passagem",
+            "lat_real": -29.59,
+            "lon_real": -51.38,
+            "x": 5.76,
+            "y": 4.82
+        },
+        {
+            "id": "Santa Cruz do Sul",
+            "role": "passagem",
+            "lat_real": -29.72,
+            "lon_real": -52.43,
+            "x": 3.45,
+            "y": 5.1
+        },
+        {
+            "id": "Venâncio Aires",
+            "role": "passagem",
+            "lat_real": -29.61,
+            "lon_real": -52.19,
+            "x": 3.98,
+            "y": 4.86
+        },
+        {
+            "id": "Cachoeira do Sul",
+            "role": "passagem",
+            "lat_real": -30.04,
+            "lon_real": -52.89,
+            "x": 2.44,
+            "y": 5.81
+        },
+        {
+            "id": "Pantano Grande",
+            "role": "passagem",
+            "lat_real": -30.19,
+            "lon_real": -52.37,
+            "x": 3.59,
+            "y": 6.14
+        },
+        {
+            "id": "Butiá",
+            "role": "passagem",
+            "lat_real": -30.12,
+            "lon_real": -51.96,
+            "x": 4.49,
+            "y": 5.98
+        },
+        {
+            "id": "Camaquã",
+            "role": "passagem",
+            "lat_real": -30.85,
+            "lon_real": -51.81,
+            "x": 4.82,
+            "y": 7.59
+        },
+        {
+            "id": "Guaíba",
+            "role": "passagem",
+            "lat_real": -30.11,
+            "lon_real": -51.33,
+            "x": 5.87,
+            "y": 5.96
+        },
+        {
+            "id": "Montenegro",
+            "role": "passagem",
+            "lat_real": -29.69,
+            "lon_real": -51.46,
+            "x": 5.59,
+            "y": 5.04
+        },
+        {
+            "id": "Taquara",
+            "role": "passagem",
+            "lat_real": -29.65,
+            "lon_real": -50.78,
+            "x": 7.08,
+            "y": 4.95
+        },
+        {
+            "id": "Terra de Areia",
+            "role": "passagem",
+            "lat_real": -29.58,
+            "lon_real": -50.07,
+            "x": 8.65,
+            "y": 4.8
+        },
+        {
+            "id": "Osório",
+            "role": "passagem",
+            "lat_real": -29.89,
+            "lon_real": -50.27,
+            "x": 8.21,
+            "y": 5.48
+        },
+        {
+            "id": "Santo Antônio da Patrulha",
+            "role": "passagem",
+            "lat_real": -29.82,
+            "lon_real": -50.52,
+            "x": 7.66,
+            "y": 5.32
+        },
+        {
+            "id": "Gravataí",
+            "role": "passagem",
+            "lat_real": -29.94,
+            "lon_real": -50.99,
+            "x": 6.62,
+            "y": 5.59
+        },
+        {
+            "id": "Lajeado",
+            "role": "abrigo",
+            "lat_real": -29.47,
+            "lon_real": -51.96,
+            "x": 4.49,
+            "y": 4.55
+        },
+        {
+            "id": "Eldorado do Sul",
+            "role": "abrigo",
+            "lat_real": -30.09,
+            "lon_real": -51.62,
+            "x": 5.24,
+            "y": 5.92
+        },
+        {
+            "id": "Novo Hamburgo",
+            "role": "abrigo",
+            "lat_real": -29.68,
+            "lon_real": -51.13,
+            "x": 6.31,
+            "y": 5.02
+        },
+        {
+            "id": "São Leopoldo",
+            "role": "abrigo",
+            "lat_real": -29.76,
+            "lon_real": -51.15,
+            "x": 6.27,
+            "y": 5.19
+        },
+        {
+            "id": "Canoas",
+            "role": "abrigo",
+            "lat_real": -29.92,
+            "lon_real": -51.18,
+            "x": 6.2,
+            "y": 5.54
+        },
+        {
+            "id": "Porto Alegre",
+            "role": "abrigo",
+            "lat_real": -30.03,
+            "lon_real": -51.23,
+            "x": 6.09,
+            "y": 5.79
+        },
+        {
+            "id": "T*",
+            "role": "super_sink",
+            "x": 11,
+            "y": 6.5
+        }
+    ],
+    "edges": [
+        {
+            "from": "S*",
+            "to": "Erechim",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "Passo Fundo",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "Santa Maria",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "Caxias do Sul",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "Pelotas",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "Vacaria (divisa SC, BR-116)",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "S*",
+            "to": "Torres (divisa SC, BR-101)",
+            "capacity": "inf",
+            "artificial": true
+        },
+        {
+            "from": "Erechim",
+            "to": "Passo Fundo",
+            "capacity": 150,
+            "name": "BR-153",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Passo Fundo",
+            "to": "Carazinho",
+            "capacity": 150,
+            "name": "BR-285",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Passo Fundo",
+            "to": "Soledade",
+            "capacity": 150,
+            "name": "BR-153",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Passo Fundo",
+            "to": "Lagoa Vermelha",
+            "capacity": 150,
+            "name": "BR-285",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Carazinho",
+            "to": "Soledade",
+            "capacity": 150,
+            "name": "BR-386",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Lagoa Vermelha",
+            "to": "Vacaria (divisa SC, BR-116)",
+            "capacity": 150,
+            "name": "BR-285",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Lagoa Vermelha",
+            "to": "Bento Gonçalves",
+            "capacity": 75,
+            "name": "BR-470",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Vacaria (divisa SC, BR-116)",
+            "to": "Caxias do Sul",
+            "capacity": 150,
+            "name": "BR-116",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Soledade",
+            "to": "Lajeado",
+            "capacity": 75,
+            "name": "BR-386",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Lajeado",
+            "to": "Montenegro",
+            "capacity": 150,
+            "name": "BR-386",
+            "faixas": 2,
+            "estado": "parcial"
+        },
+        {
+            "from": "Montenegro",
+            "to": "Canoas",
+            "capacity": 300,
+            "name": "BR-386",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Bento Gonçalves",
+            "to": "Farroupilha",
+            "capacity": 150,
+            "name": "RS-453",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Bento Gonçalves",
+            "to": "Montenegro",
+            "capacity": 75,
+            "name": "BR-470",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Caxias do Sul",
+            "to": "Farroupilha",
+            "capacity": 300,
+            "name": "RS-122",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Caxias do Sul",
+            "to": "Nova Petrópolis",
+            "capacity": 75,
+            "name": "BR-116",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Caxias do Sul",
+            "to": "Terra de Areia",
+            "capacity": 150,
+            "name": "RS-453 (Rota do Sol)",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Farroupilha",
+            "to": "São Sebastião do Caí",
+            "capacity": 75,
+            "name": "RS-122",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Nova Petrópolis",
+            "to": "Novo Hamburgo",
+            "capacity": 150,
+            "name": "BR-116",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "São Sebastião do Caí",
+            "to": "São Leopoldo",
+            "capacity": 150,
+            "name": "RS-122 / RS-240",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Santa Maria",
+            "to": "Santa Cruz do Sul",
+            "capacity": 75,
+            "name": "RS-287",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Santa Maria",
+            "to": "Cachoeira do Sul",
+            "capacity": 150,
+            "name": "RS-287 / BR-153",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Santa Cruz do Sul",
+            "to": "Venâncio Aires",
+            "capacity": 150,
+            "name": "RS-287",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Santa Cruz do Sul",
+            "to": "Pantano Grande",
+            "capacity": 150,
+            "name": "BR-471",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Venâncio Aires",
+            "to": "Montenegro",
+            "capacity": 150,
+            "name": "RS-287",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Cachoeira do Sul",
+            "to": "Pantano Grande",
+            "capacity": 150,
+            "name": "BR-153 / BR-290",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Pantano Grande",
+            "to": "Butiá",
+            "capacity": 150,
+            "name": "BR-290",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Butiá",
+            "to": "Eldorado do Sul",
+            "capacity": 75,
+            "name": "BR-290",
+            "faixas": 1,
+            "estado": "parcial"
+        },
+        {
+            "from": "Pelotas",
+            "to": "Camaquã",
+            "capacity": 300,
+            "name": "BR-116",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Camaquã",
+            "to": "Guaíba",
+            "capacity": 300,
+            "name": "BR-116",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Guaíba",
+            "to": "Eldorado do Sul",
+            "capacity": 300,
+            "name": "BR-116 / BR-290",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Eldorado do Sul",
+            "to": "Porto Alegre",
+            "capacity": 0,
+            "name": "BR-290 (ponte do Guaíba)",
+            "faixas": 2,
+            "estado": "interditada"
+        },
+        {
+            "from": "Torres (divisa SC, BR-101)",
+            "to": "Terra de Areia",
+            "capacity": 300,
+            "name": "BR-101",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Terra de Areia",
+            "to": "Osório",
+            "capacity": 300,
+            "name": "BR-101",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Osório",
+            "to": "Santo Antônio da Patrulha",
+            "capacity": 300,
+            "name": "BR-290 (Freeway)",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Santo Antônio da Patrulha",
+            "to": "Gravataí",
+            "capacity": 300,
+            "name": "BR-290 (Freeway)",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Santo Antônio da Patrulha",
+            "to": "Taquara",
+            "capacity": 150,
+            "name": "RS-474",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Taquara",
+            "to": "Novo Hamburgo",
+            "capacity": 300,
+            "name": "RS-239",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Taquara",
+            "to": "Gravataí",
+            "capacity": 150,
+            "name": "RS-020",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Montenegro",
+            "to": "São Leopoldo",
+            "capacity": 150,
+            "name": "RS-240",
+            "faixas": 1,
+            "estado": "liberada"
+        },
+        {
+            "from": "Novo Hamburgo",
+            "to": "São Leopoldo",
+            "capacity": 300,
+            "name": "BR-116",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "São Leopoldo",
+            "to": "Canoas",
+            "capacity": 150,
+            "name": "BR-116",
+            "faixas": 2,
+            "estado": "parcial"
+        },
+        {
+            "from": "Canoas",
+            "to": "Porto Alegre",
+            "capacity": 225,
+            "name": "BR-116 / BR-290",
+            "faixas": 3,
+            "estado": "parcial"
+        },
+        {
+            "from": "Gravataí",
+            "to": "Canoas",
+            "capacity": 300,
+            "name": "RS-118",
+            "faixas": 2,
+            "estado": "liberada"
+        },
+        {
+            "from": "Gravataí",
+            "to": "Porto Alegre",
+            "capacity": 225,
+            "name": "BR-290 (Freeway)",
+            "faixas": 3,
+            "estado": "parcial"
+        },
+        {
+            "from": "Porto Alegre",
+            "to": "T*",
+            "capacity": 500,
+            "name": "capacidade do abrigo"
+        },
+        {
+            "from": "Canoas",
+            "to": "T*",
+            "capacity": 300,
+            "name": "capacidade do abrigo"
+        },
+        {
+            "from": "São Leopoldo",
+            "to": "T*",
+            "capacity": 200,
+            "name": "capacidade do abrigo"
+        },
+        {
+            "from": "Novo Hamburgo",
+            "to": "T*",
+            "capacity": 150,
+            "name": "capacidade do abrigo"
+        },
+        {
+            "from": "Lajeado",
+            "to": "T*",
+            "capacity": 150,
+            "name": "capacidade do abrigo"
+        },
+        {
+            "from": "Eldorado do Sul",
+            "to": "T*",
+            "capacity": 100,
+            "name": "capacidade do abrigo"
+        }
+    ]
+}

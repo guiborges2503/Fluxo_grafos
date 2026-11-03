@@ -54,27 +54,25 @@ function expectThrows(string $class, callable $fn): void
     throw new RuntimeException("esperava {$class}");
 }
 
-foreach (['dfs', 'bfs'] as $st) {
-    test("cormen 23 ({$st})", function () use ($st) {
-        $n = cormen();
-        $r = FordFulkerson::solve($n, 's', 't', $st);
-        check($r['value'] == 23, "valor {$r['value']}");
-        check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
-        check($r['cut']['capacity'] == 23);
-    });
-    test("sem caminho ({$st})", function () use ($st) {
-        $r = FordFulkerson::solve(net([['s','a',5],['b','t',5]]), 's', 't', $st);
-        check($r['value'] == 0 && $r['numIterations'] === 0 && $r['cut']['edges'] === []);
-    });
-    test("paralelas e antiparalelas ({$st})", function () use ($st) {
-        $n = net([['s','a',3],['s','a',2],['a','b',4],['b','a',6],['b','t',10],['a','t',1]]);
-        $r = FordFulkerson::solve($n, 's', 't', $st);
-        check($r['value'] == 5 && Validation::verify($n, $r) === []);
-    });
-}
+test('cormen 23', function () {
+    $n = cormen();
+    $r = FordFulkerson::solve($n, 's', 't');
+    check($r['value'] == 23, "valor {$r['value']}");
+    check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
+    check($r['cut']['capacity'] == 23);
+});
+test('sem caminho', function () {
+    $r = FordFulkerson::solve(net([['s','a',5],['b','t',5]]), 's', 't');
+    check($r['value'] == 0 && $r['numIterations'] === 0 && $r['cut']['edges'] === []);
+});
+test('paralelas e antiparalelas', function () {
+    $n = net([['s','a',3],['s','a',2],['a','b',4],['b','a',6],['b','t',10],['a','t',1]]);
+    $r = FordFulkerson::solve($n, 's', 't');
+    check($r['value'] == 5 && Validation::verify($n, $r) === []);
+});
 
-test('cormen DFS registra 4 iterações com uma reversa', function () {
-    $r = FordFulkerson::solve(cormen(), 's', 't', 'dfs');
+test('cormen registra 4 iterações com uma reversa', function () {
+    $r = FordFulkerson::solve(cormen(), 's', 't');
     check($r['numIterations'] === 4);
     check($r['iterations'][2]['vertices'] === ['s', 'v2', 'v3', 't']);
     check($r['iterations'][2]['edges'][1]['reverse'] === true);
@@ -87,10 +85,21 @@ test('aresta única', fn() => check(FordFulkerson::solve(net([['s','t',7]]), 's'
 test('capacidade zero', fn() => check(FordFulkerson::solve(net([['s','a',5],['a','t',0]]), 's', 't')['value'] == 0));
 test('fluxo ilimitado detectado', fn() => expectThrows(UnboundedFlowException::class,
     fn() => FordFulkerson::solve(net([['s','a',INF],['a','t',INF]]), 's', 't')));
-test('patológico BFS em 2 iterações', function () {
-    $r = FordFulkerson::solve(net([['s','a',1000],['s','b',1000],['a','b',1],['a','t',1000],['b','t',1000]]), 's', 't', 'bfs');
-    check($r['value'] == 2000 && $r['numIterations'] === 2);
+test('patológico chega a 2000', function () {
+    $r = FordFulkerson::solve(net([['s','a',1000],['s','b',1000],['a','b',1],['a','t',1000],['b','t',1000]]), 's', 't');
+    check($r['value'] == 2000);
 });
+test('busca em largura: mesmo valor, patológico em 2 iterações', function () {
+    $edges = [['s','a',1000],['s','b',1000],['a','b',1],['a','t',1000],['b','t',1000]];
+    $dfs = FordFulkerson::solve(net($edges), 's', 't', false);
+    $n = net($edges);
+    $bfs = FordFulkerson::solve($n, 's', 't', false, null, 'bfs');
+    check($bfs['value'] == 2000 && $bfs['numIterations'] === 2, "bfs {$bfs['numIterations']} iterações");
+    check($dfs['numIterations'] > $bfs['numIterations'], "dfs {$dfs['numIterations']} iterações");
+    check(Validation::verify($n, $bfs) === []);
+});
+test('busca inválida rejeitada', fn() => expectThrows(InvalidArgumentException::class,
+    fn() => FordFulkerson::solve(cormen(), 's', 't', false, null, 'xyz')));
 test('rótulos numéricos (OSM)', function () {
     $r = FordFulkerson::solve(net([[101, 202, 5], [202, 303, 3]]), 101, 303);
     check($r['value'] == 3 && $r['iterations'][0]['vertices'] === [101, 202, 303]);
@@ -102,32 +111,24 @@ test('slug impede caminhos', fn() => check(InstanceRepository::slug('../../etc/p
 test('slug remove acentos', fn() => check(InstanceRepository::slug('Evacuação São João 7.4') === 'evacuacao_sao_joao_7_4',
     InstanceRepository::slug('Evacuação São João 7.4')));
 
-test('malha sintética válida nos dois modos e mesmo valor', function () {
+test('malha sintética válida', function () {
     $data = Generator::grid(12, 15, 3, 7);
-    $vals = [];
-    foreach (['dfs', 'bfs'] as $st) {
-        $n = InstanceIO::toNetwork($data);
-        $r = FordFulkerson::solve($n, 'S*', 'T*', $st, false);
-        check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
-        $vals[] = $r['value'];
-    }
-    check($vals[0] == $vals[1], 'DFS e BFS divergem');
+    $n = InstanceIO::toNetwork($data);
+    $r = FordFulkerson::solve($n, 'S*', 'T*', false);
+    check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
 });
 
-// Comparação com valores de referência calculados pela versão Python + NetworkX
-// (mesma semente não gera o mesmo grafo em Python; então comparamos DFS × BFS
-// e verificamos o certificado de corte em 30 grafos aleatórios).
+// Em 30 grafos aleatórios o fluxo encontrado precisa passar na validação:
+// capacidades, conservação e certificado fluxo máximo = corte mínimo.
 for ($seed = 1; $seed <= 30; $seed++) {
     test("aleatório semente {$seed}", function () use ($seed) {
         $data = Generator::random(20 + $seed * 3, 3, 50, $seed);
-        $vals = [];
-        foreach (['dfs', 'bfs'] as $st) {
-            $n = InstanceIO::toNetwork($data);
-            $r = FordFulkerson::solve($n, $data['source'], $data['sink'], $st, false);
-            check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
-            $vals[] = $r['value'];
-        }
-        check($vals[0] == $vals[1]);
+        $n = InstanceIO::toNetwork($data);
+        $r = FordFulkerson::solve($n, $data['source'], $data['sink'], false);
+        check(Validation::verify($n, $r) === [], implode('; ', Validation::verify($n, $r)));
+        // a busca em largura tem que chegar ao mesmo valor máximo
+        $b = FordFulkerson::solve($n, $data['source'], $data['sink'], false, null, 'bfs');
+        check(abs($b['value'] - $r['value']) < 1e-6, "bfs {$b['value']} ≠ dfs {$r['value']}");
     });
 }
 

@@ -4,12 +4,11 @@ import { FlowNetwork, UnboundedFlowError, flowsAfter, fordFulkerson, residualEdg
 import type { Instance } from "@/types";
 
 const load = (f: string): Instance => JSON.parse(readFileSync(new URL(`../../database/data/${f}.json`, import.meta.url), "utf-8"));
-const solve = (inst: Instance, st: "dfs" | "bfs" = "dfs") =>
-  fordFulkerson(FlowNetwork.fromInstance(inst), inst.source!, inst.sink!, st);
+const solve = (inst: Instance) => fordFulkerson(FlowNetwork.fromInstance(inst), inst.source!, inst.sink!);
 
 describe("Ford-Fulkerson (TypeScript)", () => {
-  it.each(["dfs", "bfs"] as const)("Cormen dá 23 (%s)", (st) => {
-    const r = solve(load("cormen"), st);
+  it("Cormen dá 23", () => {
+    const r = solve(load("cormen"));
     expect(r.value).toBe(23);
     expect(r.cut.capacity).toBe(23);
   });
@@ -51,8 +50,8 @@ describe("Ford-Fulkerson (TypeScript)", () => {
   });
 
   it.each(readdirSync(new URL("../../database/data/", import.meta.url)).filter((f) => f.endsWith(".json")))(
-    "DFS e BFS concordam em %s", (file) => {
-      const inst = load(file.replace(".json", ""));
-      expect(solve(inst, "dfs").value).toBe(solve(inst, "bfs").value);
+    "fluxo de %s igual à capacidade do corte mínimo", (file) => {
+      const r = solve(load(file.replace(".json", "")));
+      expect(r.cut.capacity).toBe(r.value);
     });
 });

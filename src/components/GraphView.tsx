@@ -61,6 +61,7 @@ export function GraphView({ instance, source, sink, mode, flows, path, residualF
         hidden ? "hidden" : "",
         evacSources.has(id) ? "evac-origem" : "",
         evacSinks.has(id) ? "evac-saida" : "",
+        small && id.length > 3 ? "named" : "", // nomes de cidade ficam embaixo do círculo
       ].join(" ");
       els.push({ group: "nodes", data: { id, label: small ? id : "" }, position: positions.get(id) ?? { x: 0, y: 0 }, classes: cls });
     }
@@ -97,6 +98,10 @@ export function GraphView({ instance, source, sink, mode, flows, path, residualF
         { selector: "node.evac-saida", style: { "background-color": safe, width: () => (small ? 26 : 9 * scale.current), height: () => (small ? 26 : 9 * scale.current) } },
         { selector: "node.terminal-origem", style: { "background-color": amber, color: ink, width: () => (small ? 34 : 14 * scale.current), height: () => (small ? 34 : 14 * scale.current), "border-width": 2, "border-color": ink } },
         { selector: "node.terminal-destino", style: { "background-color": safe, width: () => (small ? 34 : 14 * scale.current), height: () => (small ? 34 : 14 * scale.current), "border-width": 2, "border-color": ink } },
+        { selector: "node.named", style: {
+          "text-valign": "bottom", "text-margin-y": 4, color: ink, "font-size": 12,
+          "text-background-color": paper, "text-background-opacity": 0.85, "text-background-padding": "1px",
+        } },
         { selector: "edge", style: {
           "curve-style": curve, width: (e: cytoscape.EdgeSingular) => e.data("w") * scale.current, "line-color": rule, "target-arrow-color": rule,
           "target-arrow-shape": curve === "haystack" ? "none" : "triangle", "arrow-scale": small ? 0.9 : 0.5,
@@ -119,7 +124,13 @@ export function GraphView({ instance, source, sink, mode, flows, path, residualF
     scale.current = small ? 1 : Math.min(12, Math.max(1, 0.9 / cy.zoom()));
     cy.style().update();
     cyRef.current = cy;
-    return () => { cy.destroy(); cyRef.current = null; };
+    // quando a área muda de tamanho (tela cheia, um grafo só), redesenha e reenquadra a rede
+    const observer = new ResizeObserver(() => {
+      cy.resize();
+      cy.fit(undefined, 30);
+    });
+    observer.observe(box.current);
+    return () => { observer.disconnect(); cy.destroy(); cyRef.current = null; };
   }, [instance]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ---------- terminais escolhidos ---------- */

@@ -6,21 +6,25 @@ namespace Fluxo;
 final class UnboundedFlowException extends \RuntimeException {}
 
 /**
- * Ford-Fulkerson para fluxo máximo (implementação principal do projeto).
+ * Método de Ford-Fulkerson para fluxo máximo (implementação principal do projeto).
+ * O caminho aumentante é "um caminho qualquer" com capacidades positivas,
+ * encontrado com busca em profundidade.
  *
- * Estratégias de busca do caminho aumentante:
- *   "dfs" -> Ford-Fulkerson clássico (busca em profundidade)
- *   "bfs" -> Edmonds-Karp (busca em largura)
+ * A versão TypeScript (src/utils/fordFulkerson.ts) segue exatamente a mesma
+ * ordem de visita, então as duas produzem os mesmos caminhos aumentantes.
  *
- * A versão TypeScript (src/utils/fordFulkerson.ts) segue
- * exatamente a mesma ordem de visita, então as duas produzem os mesmos
- * caminhos aumentantes. A interface compara os dois resultados.
+ * Só para a análise experimental, o 1º passo também pode usar busca em largura
+ * ($search = 'bfs'), que escolhe sempre o caminho com menos arestas (variante de
+ * Edmonds-Karp). O resto do método é idêntico; o padrão continua sendo 'dfs'.
  */
 final class FordFulkerson
 {
+    public const SEARCHES = ['dfs', 'bfs'];
+
     /**
      * @param bool $record guarda os caminhos aumentantes (vértices e arestas) de cada iteração
      * @param int|null $maxIterations interrompe antes do fim (o resultado deixa de ser máximo)
+     * @param string $search 'dfs' (padrão) ou 'bfs', usado para comparar o nº de iterações
      * @param int|string $source
      * @param int|string $sink
      * @return array<string, mixed>
@@ -29,17 +33,17 @@ final class FordFulkerson
         FlowNetwork $net,
         $source,
         $sink,
-        string $strategy = 'dfs',
         bool $record = true,
-        ?int $maxIterations = null
+        ?int $maxIterations = null,
+        string $search = 'dfs'
     ): array {
-        if (!in_array($strategy, ['dfs', 'bfs'], true)) {
-            throw new \InvalidArgumentException("Estratégia desconhecida: {$strategy}");
-        }
         $s = $net->indexOf($source);
         $t = $net->indexOf($sink);
         if ($s === $t) {
             throw new \InvalidArgumentException('Origem e destino devem ser vértices diferentes.');
+        }
+        if (!in_array($search, self::SEARCHES, true)) {
+            throw new \InvalidArgumentException('Busca deve ser "dfs" ou "bfs".');
         }
 
         $net->resetFlow();
@@ -50,15 +54,17 @@ final class FordFulkerson
         $iterations = [];
         $start = hrtime(true);
 
+        // Começo: resetFlow() deixa o fluxo zero em todas as arestas.
         while ($maxIterations === null || $count < $maxIterations) {
-            [$path, $visited] = $strategy === 'bfs'
-                ? self::bfsPath($net, $s, $t)
-                : self::dfsPath($net, $s, $t);
+            // 1º passo: escolher um caminho de s até t só com capacidades residuais positivas (> 0).
+            [$path, $visited] = $search === 'bfs' ? self::bfsPath($net, $s, $t) : self::dfsPath($net, $s, $t);
             $visitedTotal += $visited;
+            // Se não existe mais caminho, o fluxo máximo já está determinado.
             if ($path === null) {
                 break;
             }
 
+            // 2º passo: a aresta de menor capacidade residual do caminho é o gargalo c.
             $bottleneck = INF;
             foreach ($path as $e) {
                 $r = $net->residual($e);
@@ -71,6 +77,7 @@ final class FordFulkerson
                     'Fluxo ilimitado: há um caminho da origem ao destino só com capacidades infinitas.'
                 );
             }
+            // 3º passo: diminuir c no sentido direto e aumentar c no sentido inverso (push faz os dois).
             foreach ($path as $e) {
                 $net->push($e, $bottleneck);
             }
@@ -102,7 +109,7 @@ final class FordFulkerson
         return [
             'source' => $source,
             'sink' => $sink,
-            'strategy' => $strategy,
+            'search' => $search,
             'value' => $value,
             'numIterations' => $count,
             'elapsedMs' => $elapsedMs,
@@ -152,6 +159,7 @@ final class FordFulkerson
         return [$visited[$t] ? self::rebuild($net, $parent, $s, $t) : null, $seen];
     }
 
+    /** Busca em largura: caminho com o menor número de arestas (só para comparação). */
     private static function bfsPath(FlowNetwork $net, int $s, int $t): array
     {
         $n = $net->numVertices();
@@ -160,24 +168,19 @@ final class FordFulkerson
         $visited[$s] = true;
         $seen = 1;
         $queue = [$s];
-        $head = 0;
-
-        while ($head < count($queue)) {
-            $u = $queue[$head++];
+        for ($h = 0; $h < count($queue) && !$visited[$t]; $h++) {
+            $u = $queue[$h];
             foreach ($net->adj[$u] as $e) {
                 $v = $net->head[$e];
                 if (!$visited[$v] && $net->cap[$e] - $net->flow[$e] > FlowNetwork::EPS) {
                     $visited[$v] = true;
                     $seen++;
                     $parent[$v] = $e;
-                    if ($v === $t) {
-                        return [self::rebuild($net, $parent, $s, $t), $seen];
-                    }
                     $queue[] = $v;
                 }
             }
         }
-        return [null, $seen];
+        return [$visited[$t] ? self::rebuild($net, $parent, $s, $t) : null, $seen];
     }
 
     /** @return int[] ids das arestas residuais de s até t */

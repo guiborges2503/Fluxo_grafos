@@ -1,6 +1,6 @@
 /** Cliente da API PHP. O prefixo vem de VITE_API_BASE_URL (arquivo .env). */
 
-import type { Instance, InstanceSummary, SolveResult, Strategy } from "@/types";
+import type { Instance, InstanceSummary, SolveResult } from "@/types";
 
 /** Mesmo domínio do site. No dev, o Vite encaminha /api para o Apache ou para o PHP embutido. */
 export const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? "/api";
@@ -34,9 +34,9 @@ export const api = {
     request<{ deleted: string }>(`/instances.php?file=${encodeURIComponent(file)}`, { method: "DELETE" }),
   generate: (params: Record<string, string | number>) =>
     request<Instance>("/generate.php", { method: "POST", body: JSON.stringify(params) }),
-  solve: (instance: Instance, source: string | number, sink: string | number, strategy: Strategy, record: boolean) =>
+  solve: (instance: Instance, source: string | number, sink: string | number, record: boolean, search: "dfs" | "bfs" = "dfs") =>
     request<SolveResult>("/solve.php", {
       method: "POST",
-      body: JSON.stringify({ instance, source, sink, strategy, record }),
+      body: JSON.stringify({ instance, source, sink, record, search }),
     }),
 };
