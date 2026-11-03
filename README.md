@@ -8,7 +8,26 @@ método de Ford-Fulkerson para responder:
 2. **Qual é o gargalo**, ou seja, quais estradas (ou abrigos) limitam a entrega?
 3. **E se** uma ponte cair ou uma rota nova for liberada, o que muda?
 
-**Integrantes:** [Nome 1], [Nome 2], [Nome 3], [Nome 4]
+**Integrantes:**
+
+- Guilherme Travain Borges
+- Lucas Bucci Borges
+- Vinicius Golçalves Trabuco
+- Kaue de Alcatara Ribeiro
+- Eduardo Martins
+- Gabriel Gebra
+
+**Relatório técnico:** [docs/relatorio.pdf](docs/relatorio.pdf) (fonte em `docs/relatorio.html`).
+
+## Principais funcionalidades
+
+- Cinco cenários da enchente, incluindo a **malha rodoviária do RS** com 33 cidades e 44 trechos.
+- O Ford-Fulkerson **passo a passo**: rede residual, caminho aumentante, gargalo e atualização em cada iteração.
+- Fluxo máximo, **corte mínimo** (o gargalo da rede) e a lista de todos os cortes nas redes pequenas.
+- **Editor de redes**: criar, mudar capacidades, escolher origem e destino, salvar e excluir.
+- **Testes em escala**: roda redes salvas ou geradas na hora (malha viária ou grafo aleatório, até dezenas de milhares
+  de vértices). Mostra iterações, tempo no PHP e no navegador, a comparação com busca em largura e a conferência automática do resultado.
+- Conferência automática de cada resultado: capacidade, conservação e fluxo = corte mínimo.
 
 ## O problema como rede de fluxo
 
@@ -23,6 +42,33 @@ método de Ford-Fulkerson para responder:
 As cidades são reais, mas as capacidades são **valores ilustrativos** criados para o projeto,
 não dados oficiais.
 
+### Tipo de grafo e hipóteses
+
+- **Direcionado:** cada aresta tem sentido, dos centros de doação para os abrigos. A volta dos caminhões vazios não é modelada.
+- **Ponderado:** o peso de cada aresta é a **capacidade**, em caminhões por dia (nas malhas sintéticas, veículos por hora).
+  Não há custo nem distância: o objetivo é só o volume máximo.
+- **Hipóteses:**
+  - o modelo é estático, com capacidade média de um dia e sem tempo de viagem;
+  - doações e caminhões são todos iguais (uma única mercadoria);
+  - uma rota bloqueada tem capacidade 0;
+  - a capacidade de recebimento de um abrigo é modelada como a aresta abrigo → `T*`;
+  - os centros de doação não têm limite de estoque, por isso as arestas `S*` → centro têm capacidade ∞.
+- **Restrições do modelo de rede de fluxo:**
+  - 0 ≤ fluxo ≤ capacidade em toda aresta;
+  - conservação do fluxo em todo vértice que não é origem nem destino;
+  - sem laços.
+
+  Arestas antiparalelas são aceitas (cada uma tem a sua reversa), e a interface também oferece a correção clássica com um vértice auxiliar.
+
+### Origem dos dados
+
+| Instância | Origem | Limitações |
+| --- | --- | --- |
+| Cenários `enchente_*` (11 vértices) | Cidades reais do RS; capacidades ilustrativas do grupo | Rede reduzida para explicar o método |
+| `rs_rodovias` (35 vértices, 57 arestas) | Gerada por `scripts/build_rs_rodovias.php`: rodovias federais e estaduais reais (mapa do DNIT/DAER) e coordenadas aproximadas das cidades. Capacidade = faixas por sentido × 150 caminhões/dia × estado da via (1 liberada, 0,5 parcial, 0 interditada) | O número de faixas e o estado de cada trecho são **estimativas e hipóteses** do grupo, inspiradas nos bloqueios noticiados em maio de 2024, e não registros oficiais |
+| `malha_*`, `aleatorio_*` | Gerador com semente fixa (`Generator.php`) | Sintéticas: servem para medir tempo e escala |
+| `cormen`, `patologico`, `sem_caminho` | Exemplos de livro-texto e casos de fronteira | Servem para conferir se o algoritmo está correto |
+
 ## Cenários
 
 | Cenário | Arquivo | O que muda | Fluxo máximo (caminhões/dia) | Gargalo |
@@ -31,6 +77,7 @@ não dados oficiais.
 | Ponte interditada | `enchente_ponte_interditada.json` | Caxias do Sul → Novo Hamburgo = 0 | 15 | Rotas que saem de Caxias e de Santa Cruz |
 | Nova rota liberada | `enchente_rota_liberada.json` | Novo Hamburgo → São Leopoldo: 4 → 8 | 27 | Rotas que saem de Caxias e de Santa Cruz |
 | Abrigos lotados | `enchente_abrigos_lotados.json` | Abrigos recebem no máximo 8, 5 e 7 | 19 | Os próprios abrigos de Porto Alegre e Canoas, mais Novo Hamburgo → São Leopoldo |
+| Malha rodoviária do RS | `rs_rodovias.json` | 33 cidades, 7 entradas de doação, 6 cidades com abrigos | 775 | Os trechos parcialmente bloqueados da serra e do Vale do Taquari (BR-470, BR-386, BR-116, RS-122, RS-287), a ponte do Guaíba interditada, a BR-101 (Terra de Areia → Osório) e o abrigo de Eldorado do Sul |
 
 Leitura dos resultados: perder uma ponte derruba a entrega de 24 para 15; liberar uma faixa
 no lugar certo sobe para 27; e, se os abrigos não dão conta de descarregar, não adianta abrir
@@ -45,6 +92,8 @@ estradas, porque o gargalo muda de lugar.
 4. O painel da direita explica o **1º**, o **2º** e o **3º** passo daquela iteração.
 5. No **Resultado** aparecem o fluxo máximo, o corte mínimo (em vermelho) e o que isso quer dizer na prática.
 6. Na aba **Editar rede** dá para mudar capacidades e calcular de novo.
+7. Em **Testes em escala (redes grandes)** dá para rodar as redes de teste (inclusive a de 2.402 vértices) ou gerar uma rede nova.
+   O tamanho e a semente são escolhidos na tela, e a tabela mostra iterações, tempos e a conferência do resultado.
 
 ## Como o método aparece no site
 
@@ -86,6 +135,9 @@ lado S do corte mínimo.
    As rotas em vermelho são o gargalo.
 6. **Cenários.** Clique em **Ponte interditada** (15), **Nova rota liberada** (27) e **Abrigos lotados** (19)
    e mostre como o gargalo muda de lugar.
+7. **Rede maior.** Abra **Malha rodoviária do RS** (775 caminhões/dia) e mostre o corte mínimo nos trechos bloqueados da serra e do vale.
+8. **Escala.** Em **Testes em escala**, rode `malha_cidade_40x60` (2.402 vértices) e gere uma rede nova com o tamanho que o professor pedir.
+   Compare as iterações da busca em profundidade com as da busca em largura e o tempo.
 
 ## Arquitetura
 
@@ -143,8 +195,8 @@ Se o PHP cair durante a demo, a interface avisa e calcula só no navegador.
 
 A tela mostra os cenários da enchente e as redes salvas pelo usuário. A pasta `database/data/` também
 traz casos usados só nos testes (exemplo clássico de livro-texto, caso patológico, origem e destino desconectados, grafo aleatório
-de 300 vértices e malhas viárias de 50 e 2.402 vértices). Eles ficam escondidos da tela para não
-poluir a apresentação.
+de 300 vértices e malhas viárias de 50 e 2.402 vértices). Eles não viram botões no topo, para não
+poluir a apresentação, mas aparecem na tela **Testes em escala**.
 
 Para criar uma instância real do OpenStreetMap (requer internet só nesse passo):
 
@@ -161,8 +213,11 @@ python -m scripts.build_osm_instance --lat -25.4284 --lon -49.2733 --dist 1500 \
 php api/tests/run.php                 # testes da API
 npm test                              # testes da versão TypeScript
 cd scripts/data-prep && python -m pytest -q
-php scripts/benchmark.php > benchmark.csv   # tempo do Ford-Fulkerson por tamanho
+php scripts/benchmark.php > docs/resultados/benchmark.csv   # tempo e iterações por tamanho
+php scripts/build_rs_rodovias.php      # gera de novo database/data/rs_rodovias.json
 ```
+
+Os resultados do benchmark ficam em [docs/resultados/benchmark.csv](docs/resultados/benchmark.csv), e a análise está no relatório.
 
 ## API
 
@@ -174,7 +229,7 @@ php scripts/benchmark.php > benchmark.csv   # tempo do Ford-Fulkerson por tamanh
 | POST | `/api/instances.php` | Grava a instância enviada |
 | DELETE | `/api/instances.php?file={arquivo}` | Exclui |
 | POST | `/api/generate.php` | `{"type":"grid"\|"random", ...}` gera instância sintética |
-| POST | `/api/solve.php` | `{"instance", "source", "sink", "record"}` |
+| POST | `/api/solve.php` | `{"instance", "source", "sink", "record", "search"}`, com `search` igual a `"dfs"` (padrão) ou `"bfs"` (só para comparação) |
 
 ## Bibliotecas (declaração exigida pelo enunciado)
 
@@ -188,5 +243,28 @@ grafo do OSMnx e validação cruzada nos testes).
 
 - Capacidades por faixa em `osm_loader.py` são estimativas; justificar com a fonte no relatório.
 - Modelo estático: não considera tempo de viagem nem congestionamento.
-- O Ford-Fulkerson com "um caminho qualquer" pode precisar de muitas iterações quando as capacidades são grandes
-  (caso `patologico.json`: 2.000 iterações). Por isso a tela mostra só redes pequenas.
+- O Ford-Fulkerson com "um caminho qualquer" tem complexidade O(E·|f*|), porque depende do valor do fluxo máximo. No pior
+  caso, o caminho pode usar a aresta de capacidade 1 do `patologico.json`, e aí são 2.000 iterações. Com a ordem de visita
+  do projeto, esse caso leva 4 iterações. Nos grafos aleatórios do benchmark o efeito aparece: em `aleatorio_500`, a busca em profundidade
+  fez 1.948 iterações e a busca em largura fez 14. Por isso o passo a passo desenhado é só para redes pequenas, e as
+  grandes ficam em "Testes em escala".
+- As capacidades de `rs_rodovias` são estimativas. Uma melhoria seria usar contagens de tráfego do DNIT e os boletins
+  oficiais de bloqueio de maio de 2024.
+- Melhorias possíveis:
+  - usar Edmonds-Karp ou Dinic como padrão em redes grandes;
+  - modelar vários dias (rede expandida no tempo);
+  - colocar custo nas rotas (fluxo de custo mínimo);
+  - gerar a malha do RS direto do OpenStreetMap com `osm_loader.py`.
+
+## Declaração de uso de Inteligência Artificial
+
+O grupo usou o **Claude** (Anthropic), pelo Claude Code, como ferramenta de apoio. O uso está descrito em detalhe no relatório (seção 12).
+Resumo:
+
+- **Etapas:** revisão do projeto em relação ao enunciado; código da tela "Testes em escala"; busca em largura para comparação;
+  script da malha rodoviária do RS; script de benchmark; textos do README e rascunho do relatório.
+- **Validação:**
+  - todo o código passa pelos testes automáticos (`php api/tests/run.php`, `npm test`);
+  - cada resultado é conferido por `Validation.php` (capacidade, conservação e fluxo = corte mínimo);
+  - o grupo revisou os textos e os dados (rodovias, faixas, estados das vias) e é responsável por eles;
+  - todos os integrantes devem saber explicar o código.

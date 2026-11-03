@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Relatório técnico — Doações na enchente com Ford-Fulkerson</title>
+<style>
+  @page { size: A4; margin: 2cm 2cm 2.2cm; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #17324d; }
+  h1 { font-size: 20pt; margin: 0 0 4pt; }
+  h2 { font-size: 13.5pt; margin: 18pt 0 6pt; border-bottom: 1.5pt solid #17324d; padding-bottom: 2pt; break-after: avoid; }
+  h3 { font-size: 11pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 6pt; text-align: justify; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0 10pt; font-size: 9pt; break-inside: avoid; }
+  th, td { border: 0.6pt solid #a9b7c2; padding: 3pt 5pt; text-align: left; vertical-align: top; }
+  th { background: #e6ecef; }
+  td.n, th.n { text-align: right; }
+  code, pre { font-family: Consolas, "Courier New", monospace; font-size: 9pt; }
+  pre { background: #f3f5f7; border: 0.6pt solid #cdd6dc; padding: 6pt 8pt; white-space: pre-wrap; break-inside: avoid; }
+  figure { margin: 8pt 0 12pt; text-align: center; break-inside: avoid; }
+  figure img { width: 100%; }
+  figcaption { font-size: 9pt; color: #546a7f; margin-top: 3pt; }
+  .capa { text-align: center; margin-top: 3cm; break-after: page; }
+  .capa h1 { font-size: 24pt; }
+  .capa .sub { font-size: 13pt; color: #546a7f; margin-bottom: 1.5cm; }
+  .capa ul { list-style: none; padding: 0; font-size: 12pt; line-height: 1.8; }
+  .preencher { background: #fbefd5; padding: 0 2pt; }
+  ul, ol { margin: 0 0 6pt; padding-left: 18pt; }
+</style>
+</head>
+<body>
+
+<section class="capa">
+  <p class="sub">Teoria dos Grafos — Tema 7: Fluxo em Grafos</p>
+  <h1>Doações na enchente do Rio Grande do Sul:<br>fluxo máximo com o método de Ford-Fulkerson</h1>
+  <p class="sub">Relatório técnico</p>
+  <p><b>Integrantes</b></p>
+  <ul>
+    <li>Guilherme Travain Borges</li>
+    <li>Lucas Bucci Borges</li>
+    <li>Vinicius Golçalves Trabuco</li>
+    <li>Kaue de Alcatara Ribeiro</li>
+    <li>Eduardo Martins</li>
+    <li>Gabriel Gebra</li>
+  </ul>
+  <p style="margin-top:1.5cm">Repositório: <code>fluxo</code> (Git) · Novembro de 2026</p>
+</section>
+
+<h2>1. Identificação do projeto e dos integrantes</h2>
+<p>
+  O projeto é uma aplicação web que calcula quantos caminhões de doações por dia conseguem chegar aos abrigos
+  durante uma enchente e qual conjunto de estradas limita essa entrega. O algoritmo obrigatório do tema,
+  <b>Ford-Fulkerson</b>, foi implementado pelo grupo em PHP (servidor) e em TypeScript (navegador), sem bibliotecas de grafos.
+  Integrantes: Guilherme Travain Borges, Lucas Bucci Borges, Vinicius Golçalves Trabuco, Kaue de Alcatara Ribeiro,
+  Eduardo Martins e Gabriel Gebra.
+</p>
+
+<h2>2. Descrição e relevância do problema</h2>
+<p>
+  Em maio de 2024, a enchente do Rio Grande do Sul bloqueou rodovias em vários pontos. Houve deslizamentos na serra,
+  pontes caíram no Vale do Taquari e os acessos a Porto Alegre e a Eldorado do Sul ficaram alagados. Ao mesmo tempo,
+  chegavam doações de todo o estado e de Santa Catarina, que precisavam chegar a abrigos com capacidade limitada de receber e distribuir.
+  A pergunta de logística é: <i>com as estradas que sobraram, quantos caminhões por dia conseguem chegar aos abrigos, e qual
+  é o gargalo?</i> Saber o gargalo indica onde uma obra emergencial, um desvio ou um abrigo novo trazem mais ganho.
+</p>
+<p>
+  Esse é exatamente o problema do <b>fluxo máximo</b>. O teorema do fluxo máximo / corte mínimo mostra o gargalo
+  como o conjunto de estradas (ou abrigos) de menor capacidade total que separa as doações dos abrigos. Numa rede com dezenas
+  de cidades e trechos, achar esse valor à mão é impraticável. Nas redes sintéticas de milhares de vértices, também usadas nos testes, é impossível.
+</p>
+
+<h2>3. Origem e características dos dados</h2>
+<table>
+  <tr><th>Instância</th><th class="n">Vértices</th><th class="n">Arestas</th><th>Origem</th><th>Limitações</th></tr>
+  <tr><td>enchente_rs e 3 variações</td><td class="n">11</td><td class="n">17</td><td>Cidades reais; capacidades ilustrativas definidas pelo grupo</td><td>Rede reduzida, feita para explicar o método passo a passo</td></tr>
+  <tr><td>rs_rodovias</td><td class="n">35</td><td class="n">57</td><td>33 cidades do RS e 44 trechos de rodovias federais e estaduais (mapa rodoviário DNIT/DAER), gerados por <code>scripts/build_rs_rodovias.php</code></td><td>Faixas e estado das vias são estimativas e hipóteses do grupo</td></tr>
+  <tr><td>malha_bairro_pequeno, malha_cidade_40x60</td><td class="n">50 / 2.402</td><td class="n">176 / 9.480</td><td>Gerador próprio de malha viária (ruas de mão dupla, avenidas mais largas), semente fixa</td><td>Sintéticas</td></tr>
+  <tr><td>aleatorio_300 e geradas na tela</td><td class="n">até 50.000</td><td class="n">—</td><td>Gerador de grafo aleatório (grau e capacidade máxima escolhidos), semente fixa</td><td>Sintéticas</td></tr>
+  <tr><td>cormen, patologico, sem_caminho</td><td class="n">4–6</td><td class="n">2–9</td><td>Exemplos de livro-texto e casos de fronteira</td><td>Usadas para verificar a correção</td></tr>
+</table>
+<p>
+  <b>Capacidade da malha do RS.</b> Para cada trecho, o grupo registrou a rodovia, o número de faixas por sentido e o estado
+  da via no cenário. A capacidade em caminhões de doação por dia é
+  <code>faixas × 150 × fator</code>, com fator 1 para via liberada, 0,5 para via parcial (pare-e-siga, desvio, uma faixa) e 0 para via interditada.
+  A capacidade de cada abrigo (quantos caminhões por dia consegue descarregar) também foi estimada: Porto Alegre 500, Canoas 300,
+  São Leopoldo 200, Novo Hamburgo 150, Lajeado 150 e Eldorado do Sul 100. Os estados das vias seguem os tipos de bloqueio
+  noticiados em maio de 2024, <b>mas não são registros oficiais</b>. O valor de 150 caminhões/dia por faixa é uma parcela
+  conservadora da capacidade da via, reservada para a ajuda humanitária. Todo o cálculo está no script, que pode ser alterado e rodado de novo.
+</p>
+<p>
+  <b>Formato.</b> As instâncias são arquivos JSON em <code>database/data/</code>, com <code>vertices</code>
+  (id, papel, coordenadas para o desenho) e <code>edges</code> (from, to, capacity, com <code>"inf"</code> para ∞).
+  Pela interface, o usuário pode criar, editar, salvar e excluir redes, e também gerar redes de qualquer tamanho.
+</p>
+
+<h2>4. Modelagem como grafo</h2>
+<table>
+  <tr><th>Elemento</th><th>Significado</th></tr>
+  <tr><td>Vértice</td><td>Cidade: ponto de entrada de doações, cidade de passagem ou cidade com abrigo</td></tr>
+  <tr><td>Aresta (u, v)</td><td>Trecho de rodovia que leva doações de u para v</td></tr>
+  <tr><td>Capacidade c(u, v)</td><td>Caminhões de doação por dia que o trecho suporta; 0 = interditado</td></tr>
+  <tr><td>Super-origem S*</td><td>Representa todos os pontos de entrada de doações (arestas S* → centro com capacidade ∞)</td></tr>
+  <tr><td>Super-destino T*</td><td>Representa todos os abrigos; a aresta abrigo → T* tem a capacidade de recebimento do abrigo</td></tr>
+  <tr><td>Fluxo f(u, v)</td><td>Caminhões por dia que efetivamente usam o trecho na solução</td></tr>
+</table>
+<p>
+  O grafo é <b>direcionado</b> e <b>ponderado</b>, e o peso de cada aresta é a sua capacidade. Hipóteses adotadas:
+</p>
+<ol>
+  <li>O modelo é estático: capacidade média de um dia, sem tempo de viagem nem congestionamento.</li>
+  <li>Há uma única mercadoria (caminhões iguais).</li>
+  <li>Os trechos são orientados no sentido doação → abrigo, e a volta dos caminhões vazios não consome capacidade.</li>
+  <li>O estoque dos centros de doação não é limitado.</li>
+</ol>
+<p>Restrições da rede de fluxo, conferidas automaticamente:</p>
+<ul>
+  <li>0 ≤ f(u, v) ≤ c(u, v);</li>
+  <li>conservação do fluxo em todo vértice diferente de S* e T*;</li>
+  <li>sem laços.</li>
+</ul>
+<p>
+  Arestas antiparalelas (u → v e v → u, como nas ruas de mão dupla das malhas) são aceitas pela implementação,
+  porque cada aresta tem a sua própria reversa residual. A interface também oferece a transformação clássica com um vértice auxiliar <i>v'</i>.
+</p>
+
+<h2>5. Fundamentação e descrição do algoritmo</h2>
+<p>
+  O <b>método de Ford-Fulkerson</b> (1956) começa com fluxo zero e, enquanto existir um <i>caminho aumentante</i>
+  de s a t na <i>rede residual</i>, envia por ele a maior quantidade possível. A rede residual tem, para cada aresta
+  (u, v), a capacidade que ainda sobra, c − f, no sentido direto e a quantidade f, que pode ser desfeita, no sentido inverso.
+</p>
+<pre>FORD-FULKERSON(G, s, t)
+  para cada aresta (u,v): f(u,v) ← 0
+  enquanto existe caminho p de s a t na rede residual G_f        ▹ 1º passo
+      c ← min{ c_f(u,v) : (u,v) em p }                            ▹ 2º passo (gargalo)
+      para cada (u,v) em p:                                        ▹ 3º passo
+          c_f(u,v) ← c_f(u,v) − c ;  c_f(v,u) ← c_f(v,u) + c
+  retorne f</pre>
+<p>
+  <b>Escolha do caminho.</b> O método permite qualquer caminho aumentante. O projeto usa <b>busca em profundidade</b>
+  (iterativa, visitando os vizinhos na ordem de inserção), que é a forma mais direta do método original. Apenas para a
+  análise experimental, a mesma implementação aceita <b>busca em largura</b> no 1º passo, o que corresponde à variante de
+  Edmonds-Karp (caminho com menos arestas). Os passos 2 e 3, a rede residual e o corte mínimo são os mesmos.
+</p>
+<p>
+  <b>Corretude.</b> Quando não existe mais caminho aumentante, o conjunto S dos vértices alcançáveis a partir de s na rede
+  residual define um corte (S, T) cujas arestas estão todas saturadas. Pelo teorema do fluxo máximo / corte mínimo,
+  |f| = c(S, T), e portanto f é máximo. A aplicação calcula esse corte e o mostra como o <b>gargalo</b> da rede.
+</p>
+<p>
+  <b>Complexidade.</b> Com capacidades inteiras, cada iteração aumenta o fluxo em pelo menos 1, e cada busca custa O(V + E).
+  O total é O(E · |f*|), onde |f*| é o valor do fluxo máximo, ou seja, depende das capacidades e não só do tamanho do grafo.
+  Com busca em largura, o número de iterações é O(V · E), e o total fica O(V · E²), independente das capacidades.
+  A seção 8 confirma essa diferença na prática.
+</p>
+<p>
+  <b>Fluxo ilimitado.</b> Se existir um caminho só com capacidades ∞, o gargalo é ∞ e o fluxo não tem limite. A implementação detecta esse
+  caso e avisa, em vez de entrar em laço infinito.
+</p>
+
+<h2>6. Arquitetura e implementação da solução</h2>
+<table>
+  <tr><th>Camada</th><th>Arquivo</th><th>Responsabilidade</th></tr>
+  <tr><td>Algoritmo (PHP)</td><td><code>api/app/Services/FordFulkerson.php</code></td><td>Ford-Fulkerson, busca do caminho, gargalo, atualização, corte mínimo</td></tr>
+  <tr><td>Rede residual</td><td><code>api/app/Services/FlowNetwork.php</code></td><td>Arrays paralelos: aresta original 2i, reversa 2i+1 (gêmea = e XOR 1); residual = cap − flow</td></tr>
+  <tr><td>Verificação</td><td><code>api/app/Validators/Validation.php</code></td><td>Capacidade, conservação, valor e certificado fluxo = corte</td></tr>
+  <tr><td>Dados</td><td><code>InstanceIO.php</code>, <code>InstanceRepository.php</code>, <code>Generator.php</code></td><td>JSON ↔ rede, gravação segura, geração de malhas e grafos aleatórios</td></tr>
+  <tr><td>API</td><td><code>api/solve.php</code>, <code>instances.php</code>, <code>generate.php</code></td><td>Endpoints HTTP JSON</td></tr>
+  <tr><td>Algoritmo (TS)</td><td><code>src/utils/fordFulkerson.ts</code></td><td>Mesmo algoritmo e mesma ordem de visita; reconstrói cada iteração para o passo a passo</td></tr>
+  <tr><td>Interface</td><td><code>src/pages/HomePage.tsx</code>, <code>src/components/*</code></td><td>Desenho (Cytoscape.js), painel de passos, cortes, editor, testes em escala</td></tr>
+</table>
+<p>
+  O servidor e o navegador produzem os mesmos caminhos aumentantes. A cada execução, a interface compara os dois resultados e avisa se
+  houver diferença. Se o servidor PHP cair durante a demonstração, o cálculo continua no navegador. Bibliotecas usadas
+  (todas auxiliares): React e Vite (interface), Cytoscape.js (apenas desenho do grafo), fontes Barlow e, na preparação
+  de dados em Python, OSMnx e NetworkX. <b>Nenhuma biblioteca de grafos é usada para calcular o fluxo.</b>
+</p>
+<h3>Funcionalidades da interface</h3>
+<ul>
+  <li><b>Cenários:</b> situação atual, ponte interditada, nova rota liberada, abrigos lotados e malha rodoviária do RS.</li>
+  <li><b>Passo a passo:</b> para cada iteração, a rede residual com o caminho escolhido, o gargalo <i>c</i> e a tabela "direto − c / inverso + c".
+    O fluxo/capacidade aparece em cada aresta, e o pseudocódigo é destacado na linha correspondente.</li>
+  <li><b>Resultado:</b> fluxo máximo, corte mínimo em vermelho, conferência de capacidade e conservação e a lista de todos os cortes (S, T) das redes pequenas.</li>
+  <li><b>Editor:</b> criar ou alterar arestas e capacidades, escolher origem e destino (ou várias, com S* e T*), salvar e excluir.</li>
+  <li><b>Testes em escala:</b> rodar as redes grandes salvas ou gerar uma rede nova (malha viária ou aleatória, tamanho e semente
+    escolhidos na tela). A tabela mostra iterações, tempo no PHP e no navegador, a comparação com busca em largura e a conferência automática.</li>
+</ul>
+
+<h2>7. Metodologia de testes</h2>
+<table>
+  <tr><th>Categoria</th><th>Casos</th><th>Verificação</th></tr>
+  <tr><td>Simples com resultado conhecido</td><td>Exemplo do Cormen (23); aresta única; cenários da enchente (24, 15, 27, 19)</td><td>Valor esperado e caminhos iguais aos calculados à mão</td></tr>
+  <tr><td>Sem solução</td><td><code>sem_caminho</code> (s e t desconectados)</td><td>Fluxo 0, nenhuma iteração, corte vazio</td></tr>
+  <tr><td>Fronteira</td><td>Capacidade 0; capacidade negativa; origem = destino; capacidades ∞ (fluxo ilimitado); arestas paralelas e antiparalelas; rótulos numéricos</td><td>Rejeição com mensagem clara ou valor correto</td></tr>
+  <tr><td>Patológico</td><td>Rede com aresta de capacidade 1 no meio de capacidades 1000</td><td>Valor 2000; comparação de iterações entre buscas</td></tr>
+  <tr><td>Aleatórios</td><td>30 grafos com sementes 1–30 (23 a 110 vértices)</td><td>Validação completa e mesmo valor nas duas buscas</td></tr>
+  <tr><td>Escala</td><td>Malhas e grafos aleatórios de 100 a 4.000 vértices; malha de 2.402 vértices</td><td>Validação completa; tempo (mediana de 3 execuções)</td></tr>
+  <tr><td>Consistência PHP × TS</td><td>Todas as instâncias de <code>database/data</code></td><td>Fluxo = corte mínimo; mesmos caminhos no Cormen</td></tr>
+</table>
+<p>
+  A validação (<code>Validation.php</code>) confere, para todo resultado: 0 ≤ f ≤ c em cada aresta; conservação em cada
+  vértice intermediário; saída líquida de s = entrada líquida em t = valor; t inalcançável na rede residual final; e capacidade do
+  corte = valor do fluxo. Comandos: <code>php api/tests/run.php</code> (47 testes) e <code>npm test</code> (26 testes), todos passando.
+  O benchmark é reproduzido com <code>php scripts/benchmark.php</code>, e os gráficos com <code>php docs/gerar_graficos.php</code>.
+</p>
+
+<h2>8. Resultados obtidos</h2>
+<h3>8.1 Cenários da enchente</h3>
+<table>
+  <tr><th>Cenário</th><th class="n">Fluxo máximo (caminhões/dia)</th><th>Gargalo (corte mínimo)</th></tr>
+  <tr><td>Situação atual</td><td class="n">24</td><td>Saídas de Novo Hamburgo, Caxias → Gravataí, Santa Cruz → Porto Alegre</td></tr>
+  <tr><td>Ponte interditada (Caxias → Novo Hamburgo = 0)</td><td class="n">15</td><td>Saídas de Caxias e de Santa Cruz</td></tr>
+  <tr><td>Nova rota liberada (Novo Hamburgo → São Leopoldo 4 → 8)</td><td class="n">27</td><td>Saídas de Caxias e de Santa Cruz</td></tr>
+  <tr><td>Abrigos lotados</td><td class="n">19</td><td>Os próprios abrigos de Porto Alegre e Canoas</td></tr>
+  <tr><td>Malha rodoviária do RS</td><td class="n">775</td><td>Ver 8.2</td></tr>
+</table>
+<p>
+  Perder uma ponte reduz a entrega em 37,5% (24 → 15). Dobrar uma única rota bem escolhida aumenta 12,5% (24 → 27).
+  Quando os abrigos não dão conta de descarregar, abrir estradas não adianta, porque o gargalo passa a ser o próprio abrigo.
+  Essa é a leitura prática do corte mínimo: ele indica <b>onde</b> investir.
+</p>
+<h3>8.2 Malha rodoviária do RS</h3>
+<p>
+  Na rede de 33 cidades, o fluxo máximo é de <b>775 caminhões/dia</b> (12 iterações com busca em profundidade, 8 com busca em largura).
+  O corte mínimo tem 8 arestas:
+</p>
+<ul>
+  <li>os trechos parcialmente bloqueados da serra e do vale (BR-470 Lagoa Vermelha → Bento Gonçalves, BR-386 Soledade → Lajeado,
+    BR-116 Caxias → Nova Petrópolis, RS-122 Farroupilha → São Sebastião do Caí, RS-287 Santa Maria → Santa Cruz), com 75 cada;</li>
+  <li>a ponte do Guaíba interditada (0);</li>
+  <li>a BR-101 Terra de Areia → Osório (300);</li>
+  <li>a capacidade do abrigo de Eldorado do Sul (100).</li>
+</ul>
+<p>
+  Ou seja, o que limita a ajuda nesse cenário não são os acessos finais a Porto Alegre, mas a <b>entrada</b> na região
+  metropolitana pela serra e pelo vale. Testamos liberar totalmente (75 → 150) cada trecho parcial. Na BR-386 Soledade → Lajeado, na BR-116 Caxias → Nova Petrópolis,
+  na RS-122 e na RS-287, o fluxo sobe de 775 para 850. Na BR-470, liberar só Lagoa Vermelha → Bento Gonçalves não muda nada, porque o trecho
+  seguinte (Bento → Montenegro) também é parcial e vira o novo gargalo. Isso mostra que o corte mínimo pode mudar de lugar.
+  O que vem do sul (Pelotas, Camaquã) só chega a Eldorado do Sul, porque a ponte do Guaíba está interditada.
+</p>
+<h3>8.3 Tempo e número de iterações</h3>
+<p>Tempos medidos no PHP 7.4 (CLI, Windows 11). Cada valor é a mediana de 3 execuções. Todos os resultados passaram na validação automática.</p>
+<table>
+  <tr><th>Rede</th><th class="n">Vértices</th><th class="n">Arestas</th><th class="n">Fluxo máx.</th><th class="n">Iterações (prof.)</th><th class="n">Tempo (prof.)</th><th class="n">Iterações (largura)</th><th class="n">Tempo (largura)</th></tr>
+  <tr><td>enchente_rs</td><td class="n">11</td><td class="n">17</td><td class="n">24</td><td class="n">7</td><td class="n">0,14 ms</td><td class="n">6</td><td class="n">0,08 ms</td></tr>
+  <tr><td>rs_rodovias</td><td class="n">35</td><td class="n">57</td><td class="n">775</td><td class="n">12</td><td class="n">0,58 ms</td><td class="n">8</td><td class="n">0,23 ms</td></tr>
+  <tr><td>patologico</td><td class="n">4</td><td class="n">5</td><td class="n">2.000</td><td class="n">4</td><td class="n">0,04 ms</td><td class="n">2</td><td class="n">0,02 ms</td></tr>
+  <tr><td>sem_caminho</td><td class="n">4</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td class="n">0,01 ms</td><td class="n">0</td><td class="n">0,00 ms</td></tr>
+  <tr><td>aleatorio_300</td><td class="n">300</td><td class="n">898</td><td class="n">172</td><td class="n">169</td><td class="n">71 ms</td><td class="n">17</td><td class="n">4 ms</td></tr>
+  <tr><td>malha_cidade_40x60</td><td class="n">2.402</td><td class="n">9.480</td><td class="n">43.200</td><td class="n">140</td><td class="n">737 ms</td><td class="n">70</td><td class="n">777 ms</td></tr>
+  <tr><td>aleatorio_100</td><td class="n">100</td><td class="n">395</td><td class="n">1.299</td><td class="n">700</td><td class="n">341 ms</td><td class="n">8</td><td class="n">2 ms</td></tr>
+  <tr><td>aleatorio_500</td><td class="n">500</td><td class="n">1.999</td><td class="n">1.961</td><td class="n">1.948</td><td class="n">5,1 s</td><td class="n">14</td><td class="n">18 ms</td></tr>
+  <tr><td>aleatorio_1000</td><td class="n">1.000</td><td class="n">3.996</td><td class="n">2.162</td><td class="n">2.040</td><td class="n">10,0 s</td><td class="n">17</td><td class="n">24 ms</td></tr>
+  <tr><td>aleatorio_2000</td><td class="n">2.000</td><td class="n">7.998</td><td class="n">2.384</td><td class="n">2.282</td><td class="n">19,3 s</td><td class="n">22</td><td class="n">190 ms</td></tr>
+  <tr><td>aleatorio_4000</td><td class="n">4.000</td><td class="n">15.992</td><td class="n">2.310</td><td class="n">2.310</td><td class="n">51,0 s</td><td class="n">28</td><td class="n">461 ms</td></tr>
+  <tr><td>malha_10x10</td><td class="n">102</td><td class="n">380</td><td class="n">12.600</td><td class="n">34</td><td class="n">20 ms</td><td class="n">15</td><td class="n">5 ms</td></tr>
+  <tr><td>malha_22x22</td><td class="n">486</td><td class="n">1.892</td><td class="n">26.100</td><td class="n">82</td><td class="n">183 ms</td><td class="n">33</td><td class="n">56 ms</td></tr>
+  <tr><td>malha_44x44</td><td class="n">1.938</td><td class="n">7.656</td><td class="n">52.800</td><td class="n">172</td><td class="n">1,3 s</td><td class="n">77</td><td class="n">209 ms</td></tr>
+  <tr><td>malha_63x63</td><td class="n">3.971</td><td class="n">15.750</td><td class="n">75.600</td><td class="n">247</td><td class="n">4,7 s</td><td class="n">114</td><td class="n">1,1 s</td></tr>
+</table>
+<figure><img src="resultados/iteracoes.svg" alt="Iterações por tamanho"><figcaption>Figura 1. Iterações em função do número de arestas (escala log-log). Linha cheia: busca em profundidade; tracejada: busca em largura.</figcaption></figure>
+<figure><img src="resultados/tempo_ms.svg" alt="Tempo por tamanho"><figcaption>Figura 2. Tempo de execução no PHP 7.4 (mediana de 3 execuções), escala log-log.</figcaption></figure>
+<h3>8.4 Análise</h3>
+<ul>
+  <li><b>Correção.</b> Nas 20 redes do benchmark, nos 30 grafos aleatórios dos testes e nas duas implementações (PHP e TypeScript),
+    o fluxo encontrado respeitou capacidade e conservação, e o valor foi igual à capacidade do corte mínimo. As duas buscas chegaram
+    sempre ao mesmo valor máximo, o que confirma que a escolha do caminho muda o esforço, mas não a resposta.</li>
+  <li><b>Iterações com busca em profundidade.</b> Nos grafos aleatórios, o número de iterações fica perto do próprio valor do fluxo
+    (aleatorio_500: fluxo 1.961, 1.948 iterações). A busca em profundidade acha caminhos longos e com gargalo pequeno, e cada iteração
+    aumenta o fluxo em pouco. É o comportamento O(E·|f*|) previsto na seção 5.</li>
+  <li><b>Iterações com busca em largura.</b> Com caminhos curtos, o número de iterações quase não depende das capacidades: 8 a 28 nos
+    grafos aleatórios, até 139 vezes menos que com busca em profundidade (aleatorio_500). Nas malhas, a diferença é menor (cerca de 2 vezes),
+    porque as capacidades são grandes e os gargalos são largos.</li>
+  <li><b>Tempo.</b> Mesmo no PHP, redes com cerca de 4.000 cidades e 16.000 trechos são resolvidas em segundos. Isso seria impraticável à mão: a
+    rede de 4.000 vértices precisou de 2.310 caminhos aumentantes. Nas instâncias reais do problema (11 e 35 vértices), a resposta sai em menos de 1 ms.
+    Isso permite testar cenários "e se" (ponte cai, rota abre, abrigo lota) ao vivo.</li>
+  <li><b>Caso patológico.</b> A rede <code>patologico</code> pode levar 2.000 iterações se o caminho usar a aresta central de capacidade 1.
+    Com a ordem de visita do projeto, a busca em profundidade não cai nessa armadilha (4 iterações), mas os grafos aleatórios
+    mostram que o problema de fundo existe.</li>
+  <li><b>Malha do RS.</b> O corte mínimo mostra que, nesse cenário, a prioridade de reconstrução são os trechos da serra e do Vale do Taquari. Aumentar
+    só a capacidade dos acessos a Porto Alegre não aumentaria a entrega.</li>
+</ul>
+
+<h2>9. Limitações e possibilidades de melhoria</h2>
+<ul>
+  <li><b>Dados estimados.</b> As capacidades da malha do RS vêm de uma fórmula do grupo (faixas × 150 × estado), não de contagens
+    de tráfego. A melhoria seria usar os volumes do DNIT e os boletins oficiais de bloqueio de maio de 2024.</li>
+  <li><b>Modelo estático.</b> O modelo não considera tempo de viagem, horários nem acúmulo de carga. Uma rede expandida no tempo
+    (um vértice por cidade e por dia) responderia "quanto chega em 3 dias".</li>
+  <li><b>Sem custo.</b> Todas as rotas valem o mesmo. Com distância ou custo, o problema vira fluxo de custo mínimo.</li>
+  <li><b>Uma mercadoria.</b> Água, alimentos e remédios teriam abrigos e capacidades diferentes (fluxo multiproduto).</li>
+  <li><b>Desempenho da busca em profundidade.</b> A complexidade O(E·|f*|) aparece nos grafos aleatórios. Para redes grandes,
+    o padrão deveria ser Edmonds-Karp ou Dinic. O projeto manteve a busca em profundidade por ser o método pedido, e mostra a diferença na tela.</li>
+  <li><b>Desenho.</b> Redes com mais de 200 arestas não são desenhadas no passo a passo; para elas, a tela de testes em escala mostra só os números.</li>
+  <li><b>Dados reais do OpenStreetMap.</b> O projeto tem o carregador (<code>osm_loader.py</code>), mas a instância precisa ser gerada com internet.</li>
+</ul>
+<p>
+  <b>Decisões de implementação.</b> Os dados ficam em arrays paralelos, e não em objetos, por desempenho. A reversa de cada aresta é e XOR 1.
+  A busca em profundidade é iterativa para não estourar a pilha em malhas grandes. O algoritmo foi feito em duas linguagens,
+  com a mesma ordem de visita, para o passo a passo ser instantâneo e conferido pelo servidor. Não há banco de dados, para a
+  aplicação rodar em qualquer máquina com PHP e Node.
+</p>
+
+<h2>10. Contribuições individuais</h2>
+<p class="preencher">Preencher pelo grupo: o que cada integrante fez, de forma que cada um consiga explicar a sua parte na apresentação.</p>
+<table>
+  <tr><th>Integrante</th><th>Contribuição</th></tr>
+  <tr><td>Guilherme Travain Borges</td><td class="preencher">[preencher]</td></tr>
+  <tr><td>Lucas Bucci Borges</td><td class="preencher">[preencher]</td></tr>
+  <tr><td>Vinicius Golçalves Trabuco</td><td class="preencher">[preencher]</td></tr>
+  <tr><td>Kaue de Alcatara Ribeiro</td><td class="preencher">[preencher]</td></tr>
+  <tr><td>Eduardo Martins</td><td class="preencher">[preencher]</td></tr>
+  <tr><td>Gabriel Gebra</td><td class="preencher">[preencher]</td></tr>
+</table>
+
+<h2>11. Referências</h2>
+<ol>
+  <li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <i>Algoritmos: teoria e prática</i>. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 26 (Fluxo máximo).</li>
+  <li>FORD, L. R.; FULKERSON, D. R. Maximal flow through a network. <i>Canadian Journal of Mathematics</i>, v. 8, p. 399–404, 1956.</li>
+  <li>EDMONDS, J.; KARP, R. M. Theoretical improvements in algorithmic efficiency for network flow problems. <i>Journal of the ACM</i>, v. 19, n. 2, p. 248–264, 1972.</li>
+  <li>DNIT — Departamento Nacional de Infraestrutura de Transportes. Mapa rodoviário do Rio Grande do Sul.</li>
+  <li>DAER/RS — Departamento Autônomo de Estradas de Rodagem. Malha rodoviária estadual.</li>
+  <li>Defesa Civil do Rio Grande do Sul. Boletins sobre as enchentes de maio de 2024.</li>
+  <li>Cytoscape.js. Disponível em: https://js.cytoscape.org.</li>
+</ol>
+
+<h2>12. Declaração de uso de ferramentas de Inteligência Artificial</h2>
+<p>
+  <b>Ferramenta:</b> Claude (Anthropic), modelo Claude Opus 5.5, usado pelo Claude Code (aplicativo desktop).
+</p>
+<table>
+  <tr><th>Etapa</th><th>O que foi produzido com auxílio da IA</th></tr>
+  <tr><td>Revisão</td><td>Comparação do projeto com o enunciado e com os critérios de avaliação, e lista do que faltava</td></tr>
+  <tr><td>Código</td><td>Tela "Testes em escala" (<code>ScalePanel.tsx</code>); opção de busca em largura em <code>FordFulkerson.php</code> e os testes dela;
+    script da malha rodoviária (<code>build_rs_rodovias.php</code>); nova versão do <code>benchmark.php</code>; <code>gerar_graficos.php</code></td></tr>
+  <tr><td>Dados</td><td>Primeira versão da lista de cidades, rodovias, faixas e estados das vias da malha do RS</td></tr>
+  <tr><td>Textos</td><td>Seções do README (modelagem, origem dos dados, limitações) e rascunho deste relatório</td></tr>
+  <tr><td class="preencher">Etapas anteriores</td><td class="preencher">[O grupo deve completar: se usou IA na primeira versão do algoritmo, da API ou da interface, dizer onde]</td></tr>
+</table>
+<p>
+  <b>Revisão e validação.</b> Todo código gerado passou pelos testes automáticos (47 testes em PHP e 26 em TypeScript). Todo resultado
+  numérico deste relatório foi produzido pelo próprio programa e conferido pela validação automática (capacidade, conservação
+  e fluxo = corte mínimo). <span class="preencher">[O grupo deve confirmar: as rodovias, faixas e estados das vias foram conferidos
+  no mapa do DNIT/DAER pelos integrantes]</span>. O grupo revisou os textos e se responsabiliza por eles, e todos os
+  integrantes estudaram o código para conseguir explicá-lo.
+</p>
+
+</body>
+</html>
