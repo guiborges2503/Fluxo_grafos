@@ -65,7 +65,7 @@ não dados oficiais.
 | Instância | Origem | Limitações |
 | --- | --- | --- |
 | Cenários `enchente_*` (11 vértices) | Cidades reais do RS; capacidades ilustrativas do grupo | Rede reduzida para explicar o método |
-| `rs_rodovias` (35 vértices, 57 arestas) | Gerada por `scripts/build_rs_rodovias.php`: rodovias federais e estaduais reais (mapa do DNIT/DAER) e coordenadas aproximadas das cidades. Capacidade = faixas por sentido × 150 caminhões/dia × estado da via (1 liberada, 0,5 parcial, 0 interditada) | O número de faixas e o estado de cada trecho são **estimativas e hipóteses** do grupo, inspiradas nos bloqueios noticiados em maio de 2024, e não registros oficiais |
+| `rs_rodovias` (35 vértices, 57 arestas) | Gerada por `scripts/build_rs_rodovias.php`: rodovias federais e estaduais listadas pelo grupo e coordenadas aproximadas das cidades. Capacidade = faixas por sentido × 150 caminhões/dia × estado da via (1 liberada, 0,5 parcial, 0 interditada) | Os trechos, o número de faixas e o estado de cada trecho são **estimativas e hipóteses** do grupo, inspiradas nos bloqueios noticiados em maio de 2024, e não foram conferidos com dados oficiais |
 | `malha_*`, `aleatorio_*` | Gerador com semente fixa (`Generator.php`) | Sintéticas: servem para medir tempo e escala |
 | `cormen`, `patologico`, `sem_caminho` | Exemplos de livro-texto e casos de fronteira | Servem para conferir se o algoritmo está correto |
 
@@ -258,10 +258,14 @@ grafo do OSMnx e validação cruzada nos testes).
 
 ## Declaração de uso de Inteligência Artificial
 
-O grupo usou o **Claude** (Anthropic), pelo Claude Code, como ferramenta de apoio. O uso está descrito em detalhe no relatório (seção 12).
-Resumo:
+As ferramentas de IA foram usadas como **apoio**, e não para fazer o projeto inteiro. Nenhuma parte foi incluída sem passar pelo grupo:
+os integrantes escolheram o problema, definiram a modelagem, tomaram as decisões de implementação, fizeram cada pedido às ferramentas
+e revisaram, testaram e ajustaram tudo antes de incluir. O uso está descrito em detalhe no relatório (seção 12).
 
-- **Etapas:** revisão do projeto em relação ao enunciado; código da tela "Testes em escala"; busca em largura para comparação;
+- **Ferramentas:**
+  - **Cursor** (editor com assistente de IA): sugestões e ajuda na escrita do código;
+  - **Claude** (Anthropic), pelo Claude Code: revisão do projeto e apoio nas etapas abaixo.
+- **Etapas em que o Claude ajudou:** revisão do projeto em relação ao enunciado; código da tela "Testes em escala"; busca em largura para comparação;
   script da malha rodoviária do RS; script de benchmark; textos do README e rascunho do relatório.
 - **Validação:**
   - todo o código passa pelos testes automáticos (`php api/tests/run.php`, `npm test`);
