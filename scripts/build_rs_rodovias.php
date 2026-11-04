@@ -6,7 +6,8 @@ declare(strict_types=1);
  *     php scripts/build_rs_rodovias.php
  *
  * Origem dos dados (documentada também no relatório):
- *   - cidades e ligações: principais rodovias federais e estaduais do RS (mapa rodoviário do DNIT/DAER);
+ *   - cidades e ligações: principais rodovias federais e estaduais do RS, listadas pelo grupo
+ *     (ainda não conferidas com o mapa oficial do DNIT/DAER);
  *   - coordenadas: posição aproximada da sede de cada município (só para o desenho);
  *   - capacidade: ESTIMATIVA feita pelo grupo, não é dado oficial:
  *         capacidade = faixas por sentido × CAMINHOES_POR_FAIXA × fator do estado da via

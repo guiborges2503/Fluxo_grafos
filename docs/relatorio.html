@@ -72,7 +72,7 @@
 <table>
   <tr><th>Instância</th><th class="n">Vértices</th><th class="n">Arestas</th><th>Origem</th><th>Limitações</th></tr>
   <tr><td>enchente_rs e 3 variações</td><td class="n">11</td><td class="n">17</td><td>Cidades reais; capacidades ilustrativas definidas pelo grupo</td><td>Rede reduzida, feita para explicar o método passo a passo</td></tr>
-  <tr><td>rs_rodovias</td><td class="n">35</td><td class="n">57</td><td>33 cidades do RS e 44 trechos de rodovias federais e estaduais (mapa rodoviário DNIT/DAER), gerados por <code>scripts/build_rs_rodovias.php</code></td><td>Faixas e estado das vias são estimativas e hipóteses do grupo</td></tr>
+  <tr><td>rs_rodovias</td><td class="n">35</td><td class="n">57</td><td>33 cidades do RS e 44 trechos de rodovias federais e estaduais, listados pelo grupo e gerados por <code>scripts/build_rs_rodovias.php</code></td><td>Trechos, faixas e estado das vias são estimativas do grupo, não conferidas com dados oficiais</td></tr>
   <tr><td>malha_bairro_pequeno, malha_cidade_40x60</td><td class="n">50 / 2.402</td><td class="n">176 / 9.480</td><td>Gerador próprio de malha viária (ruas de mão dupla, avenidas mais largas), semente fixa</td><td>Sintéticas</td></tr>
   <tr><td>aleatorio_300 e geradas na tela</td><td class="n">até 50.000</td><td class="n">—</td><td>Gerador de grafo aleatório (grau e capacidade máxima escolhidos), semente fixa</td><td>Sintéticas</td></tr>
   <tr><td>cormen, patologico, sem_caminho</td><td class="n">4–6</td><td class="n">2–9</td><td>Exemplos de livro-texto e casos de fronteira</td><td>Usadas para verificar a correção</td></tr>
@@ -301,15 +301,20 @@
 </p>
 
 <h2>10. Contribuições individuais</h2>
-<p class="preencher">Preencher pelo grupo: o que cada integrante fez, de forma que cada um consiga explicar a sua parte na apresentação.</p>
+<p>
+  O trabalho foi dividido por partes do projeto. Todos participaram das discussões sobre o problema e a modelagem, e todos
+  estudaram o código para conseguir explicá-lo.
+</p>
 <table>
-  <tr><th>Integrante</th><th>Contribuição</th></tr>
-  <tr><td>Guilherme Travain Borges</td><td class="preencher">[preencher]</td></tr>
-  <tr><td>Lucas Bucci Borges</td><td class="preencher">[preencher]</td></tr>
-  <tr><td>Vinicius Golçalves Trabuco</td><td class="preencher">[preencher]</td></tr>
-  <tr><td>Kaue de Alcatara Ribeiro</td><td class="preencher">[preencher]</td></tr>
-  <tr><td>Eduardo Martins</td><td class="preencher">[preencher]</td></tr>
-  <tr><td>Gabriel Gebra</td><td class="preencher">[preencher]</td></tr>
+  <tr><th style="width:28%">Integrante</th><th>Contribuição</th></tr>
+  <tr><td>Guilherme Travain Borges</td><td>Organização e manutenção do repositório no GitHub: reuniu o código produzido pelo grupo e fez os commits
+    (por isso o histórico está em seu nome). Estrutura da aplicação, API em PHP e preparação do ambiente para a demonstração.</td></tr>
+  <tr><td>Lucas Bucci Borges</td><td>Implementação do método de Ford-Fulkerson e da rede residual (<code>FordFulkerson.php</code>, <code>FlowNetwork.php</code>)
+    e do cálculo do corte mínimo.</td></tr>
+  <tr><td>Vinicius Golçalves Trabuco</td><td>Interface em React: desenho do grafo, passo a passo das iterações, editor de redes e tela de testes em escala.</td></tr>
+  <tr><td>Kaue de Alcatara Ribeiro</td><td>Modelagem do problema e dados: cenários da enchente, pesquisa das rodovias e montagem da malha rodoviária do RS.</td></tr>
+  <tr><td>Eduardo Martins</td><td>Testes e validação (<code>Validation.php</code>, testes em PHP e TypeScript), benchmark e análise dos resultados.</td></tr>
+  <tr><td>Gabriel Gebra</td><td>Relatório técnico, slides da apresentação e levantamento das referências.</td></tr>
 </table>
 
 <h2>11. Referências</h2>
@@ -317,30 +322,38 @@
   <li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <i>Algoritmos: teoria e prática</i>. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 26 (Fluxo máximo).</li>
   <li>FORD, L. R.; FULKERSON, D. R. Maximal flow through a network. <i>Canadian Journal of Mathematics</i>, v. 8, p. 399–404, 1956.</li>
   <li>EDMONDS, J.; KARP, R. M. Theoretical improvements in algorithmic efficiency for network flow problems. <i>Journal of the ACM</i>, v. 19, n. 2, p. 248–264, 1972.</li>
-  <li>DNIT — Departamento Nacional de Infraestrutura de Transportes. Mapa rodoviário do Rio Grande do Sul.</li>
-  <li>DAER/RS — Departamento Autônomo de Estradas de Rodagem. Malha rodoviária estadual.</li>
-  <li>Defesa Civil do Rio Grande do Sul. Boletins sobre as enchentes de maio de 2024.</li>
   <li>Cytoscape.js. Disponível em: https://js.cytoscape.org.</li>
 </ol>
 
 <h2>12. Declaração de uso de ferramentas de Inteligência Artificial</h2>
 <p>
-  <b>Ferramenta:</b> Claude (Anthropic), modelo Claude Opus 5.5, usado pelo Claude Code (aplicativo desktop).
+  <b>Papel da IA.</b> As ferramentas de IA foram usadas como <b>apoio</b> ao trabalho do grupo, e não para fazer o projeto inteiro.
+  Nenhuma parte foi incluída sem passar pelo grupo. Os integrantes:
 </p>
+<ul>
+  <li>escolheram o problema e definiram a modelagem;</li>
+  <li>tomaram as decisões de implementação;</li>
+  <li>fizeram cada pedido às ferramentas e escolheram o que aproveitar;</li>
+  <li>revisaram, testaram e ajustaram tudo antes de incluir no projeto.</li>
+</ul>
+<p><b>Ferramentas utilizadas:</b></p>
+<ul>
+  <li><b>Cursor</b> (editor com assistente de IA): sugestões e ajuda na escrita do código durante o desenvolvimento.</li>
+  <li><b>Claude</b> (Anthropic, modelo Claude Opus 5.5, pelo Claude Code): revisão do projeto e apoio nas partes listadas abaixo.</li>
+</ul>
 <table>
-  <tr><th>Etapa</th><th>O que foi produzido com auxílio da IA</th></tr>
+  <tr><th>Etapa</th><th>Onde o Claude ajudou</th></tr>
   <tr><td>Revisão</td><td>Comparação do projeto com o enunciado e com os critérios de avaliação, e lista do que faltava</td></tr>
   <tr><td>Código</td><td>Tela "Testes em escala" (<code>ScalePanel.tsx</code>); opção de busca em largura em <code>FordFulkerson.php</code> e os testes dela;
     script da malha rodoviária (<code>build_rs_rodovias.php</code>); nova versão do <code>benchmark.php</code>; <code>gerar_graficos.php</code></td></tr>
   <tr><td>Dados</td><td>Primeira versão da lista de cidades, rodovias, faixas e estados das vias da malha do RS</td></tr>
   <tr><td>Textos</td><td>Seções do README (modelagem, origem dos dados, limitações) e rascunho deste relatório</td></tr>
-  <tr><td class="preencher">Etapas anteriores</td><td class="preencher">[O grupo deve completar: se usou IA na primeira versão do algoritmo, da API ou da interface, dizer onde]</td></tr>
 </table>
 <p>
-  <b>Revisão e validação.</b> Todo código gerado passou pelos testes automáticos (47 testes em PHP e 26 em TypeScript). Todo resultado
+  <b>Revisão e validação.</b> Todo código feito com ajuda das ferramentas foi lido e revisado pelo grupo e passou pelos testes automáticos (47 testes em PHP e 26 em TypeScript). Todo resultado
   numérico deste relatório foi produzido pelo próprio programa e conferido pela validação automática (capacidade, conservação
-  e fluxo = corte mínimo). <span class="preencher">[O grupo deve confirmar: as rodovias, faixas e estados das vias foram conferidos
-  no mapa do DNIT/DAER pelos integrantes]</span>. O grupo revisou os textos e se responsabiliza por eles, e todos os
+  e fluxo = corte mínimo). As rodovias, faixas e estados das vias da malha do RS são estimativas do grupo e não foram conferidos com
+  dados oficiais; essa é uma das limitações do trabalho (seção 9). O grupo revisou os textos e se responsabiliza por eles, e todos os
   integrantes estudaram o código para conseguir explicá-lo.
 </p>
 
